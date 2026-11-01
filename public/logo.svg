@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
+  <defs>
+    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4f46e5" />
+      <stop offset="100%" stop-color="#7c3aed" />
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="128" fill="url(#grad)" />
+  <!-- Graduation Cap -->
+  <path d="M256 120L96 200L256 280L416 200L256 120Z" fill="white" fill-opacity="0.95" />
+  <path d="M144 230V310C144 340 194 370 256 370C318 370 368 340 368 310V230L256 290L144 230Z" fill="white" fill-opacity="0.8" />
+  <path d="M416 200V300" stroke="#fbbf24" stroke-width="16" stroke-linecap="round" />
+  <circle cx="416" cy="316" r="14" fill="#fbbf24" />
+  <!-- Small Star Badge -->
+  <circle cx="256" cy="420" r="28" fill="#10b981" />
+  <path d="M246 420L253 427L267 413" stroke="white" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" />
+</svg>

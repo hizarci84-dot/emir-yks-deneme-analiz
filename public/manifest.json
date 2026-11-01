@@ -1,0 +1,18 @@
+{
+  "name": "Emir YKS EA - Deneme Analiz ve YÖK Atlas Koçu",
+  "short_name": "Emir YKS",
+  "description": "Emir için 11. Sınıf Maarif Modeli YKS Eşit Ağırlık Deneme Analiz ve Koçluk Uygulaması",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#4f46e5",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/logo.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
