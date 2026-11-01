@@ -2,13 +2,23 @@ import React, { useState, useEffect } from 'react';
 import { Sparkles, Calendar, Cloud, Plus, GraduationCap, CheckCircle } from 'lucide-react';
 
 export default function Navbar({ activeTab, setActiveTab, onOpenAddModal, settings }) {
-  // YKS 2027 Geri Sayım Hesaplama (11. Sınıf öğrencisi 2027 Haziran'da sınava girecek)
+  // YKS Geri Sayım Hesaplama (Hedef yıla göre dinamik)
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0 });
+  const targetYear = parseInt(settings?.targetYear, 10) || 2028;
 
   useEffect(() => {
     const calculateTime = () => {
-      // YKS 2027 Tahmini Tarih: 19 Haziran 2027 Saat 10:15
-      const targetDate = new Date('2027-06-19T10:15:00');
+      // YKS sınavları her yıl Haziran ayının 3. hafta sonu (Cumartesi 10:15) düzenlenir
+      const yksSchedule = {
+        2026: '2026-06-20T10:15:00',
+        2027: '2027-06-19T10:15:00',
+        2028: '2028-06-17T10:15:00',
+        2029: '2029-06-16T10:15:00',
+        2030: '2030-06-15T10:15:00'
+      };
+
+      const targetDateStr = yksSchedule[targetYear] || `${targetYear}-06-17T10:15:00`;
+      const targetDate = new Date(targetDateStr);
       const now = new Date();
       const difference = targetDate - now;
 
@@ -16,13 +26,15 @@ export default function Navbar({ activeTab, setActiveTab, onOpenAddModal, settin
         const days = Math.floor(difference / (1000 * 60 * 60 * 24));
         const hours = Math.floor((difference / (1000 * 60 * 60)) % 24);
         setTimeLeft({ days, hours });
+      } else {
+        setTimeLeft({ days: 0, hours: 0 });
       }
     };
 
     calculateTime();
     const interval = setInterval(calculateTime, 60000);
     return () => clearInterval(interval);
-  }, []);
+  }, [targetYear]);
 
   return (
     <header className="sticky top-0 z-30 bg-white/90 backdrop-blur-md border-b border-slate-200/80 transition-all safe-top">
@@ -56,7 +68,7 @@ export default function Navbar({ activeTab, setActiveTab, onOpenAddModal, settin
               <div className="text-xs font-bold text-amber-900">
                 <span className="text-amber-700 font-extrabold sm:text-sm">{timeLeft.days}</span> gün <span className="hidden sm:inline">kaldı</span>
                 <span className="text-amber-600 text-[10px] font-normal block sm:inline sm:ml-1">
-                  (YKS {settings?.targetYear || 2027})
+                  (YKS {targetYear})
                 </span>
               </div>
             </div>

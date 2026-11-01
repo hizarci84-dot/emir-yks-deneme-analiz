@@ -179,8 +179,8 @@ export const StorageService = {
         studentName: 'Emir',
         grade: '11. Sınıf',
         track: 'Eşit Ağırlık (EA)',
-        targetYear: 2027,
-        cloudSyncCode: 'EMIR-YKS-2026',
+        targetYear: 2028,
+        cloudSyncCode: 'EMIR-YKS-2028',
         firebaseConfig: null,
         lastCloudSync: null
       };
@@ -189,8 +189,8 @@ export const StorageService = {
         studentName: 'Emir',
         grade: '11. Sınıf',
         track: 'Eşit Ağırlık (EA)',
-        targetYear: 2027,
-        cloudSyncCode: 'EMIR-YKS-2026'
+        targetYear: 2028,
+        cloudSyncCode: 'EMIR-YKS-2028'
       };
     }
   },

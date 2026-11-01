@@ -31,7 +31,7 @@ export default function CloudSyncSettings({
       studentName: formData.studentName || 'Emir',
       grade: formData.grade || '11. Sınıf',
       track: formData.track || 'Eşit Ağırlık (EA)',
-      targetYear: parseInt(formData.targetYear, 10) || 2027,
+      targetYear: parseInt(formData.targetYear, 10) || 2028,
       cloudSyncCode: cloudCode
     };
     StorageService.saveSettings(updated);
@@ -356,7 +356,7 @@ export default function CloudSyncSettings({
               <label className="block text-xs font-bold text-slate-700 mb-1">Hedef Sınav Yılı</label>
               <input
                 type="number"
-                value={formData.targetYear || 2027}
+                value={formData.targetYear || 2028}
                 onChange={(e) => setFormData({ ...formData, targetYear: e.target.value })}
                 className="w-full px-3 py-2 rounded-xl bg-slate-50 border border-slate-300 text-xs sm:text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-500"
               />
