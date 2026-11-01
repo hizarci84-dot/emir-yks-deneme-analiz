@@ -24,8 +24,8 @@ export default function Dashboard({
   });
 
   // TYT ve AYT denemelerini ayır
-  const tytExams = exams.filter(e => e.stage === 'TYT' || e.stage === 'BOTH');
-  const aytExams = exams.filter(e => e.stage === 'AYT' || e.stage === 'BOTH');
+  const tytExams = exams.filter(e => e.stage === 'TYT');
+  const aytExams = exams.filter(e => e.stage === 'AYT');
 
   // Son denemeler
   const latestTyt = tytExams.length > 0 ? tytExams[0] : null;

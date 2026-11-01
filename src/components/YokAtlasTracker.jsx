@@ -17,9 +17,9 @@ export default function YokAtlasTracker({
   // Mevcut hedef programı bul
   const currentTarget = YOK_ATLAS_PROGRAMS.find(p => p.id === targetProgramId) || YOK_ATLAS_PROGRAMS[1]; // Varsayılan Boğaziçi YBS
 
-  // Emir'in son veya ortalama netlerini hesapla
-  const tytExams = exams.filter(e => e.stage === 'TYT' || e.stage === 'BOTH');
-  const aytExams = exams.filter(e => e.stage === 'AYT' || e.stage === 'BOTH');
+  // Emir'in son veya ortalama netlerini hesapla (1. Aşama ve 2. Aşama bağımsız oturumlar)
+  const tytExams = exams.filter(e => e.stage === 'TYT');
+  const aytExams = exams.filter(e => e.stage === 'AYT');
 
   // Ders ders ortalamaları
   const getSubjectAverage = (subId, examList) => {

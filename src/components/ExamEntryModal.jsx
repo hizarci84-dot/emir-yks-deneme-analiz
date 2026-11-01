@@ -6,7 +6,7 @@ import { EXAM_STAGES } from '../data/examStructure';
 export default function ExamEntryModal({ isOpen, onClose, onSave, editingExam }) {
   if (!isOpen) return null;
 
-  const [stage, setStage] = useState('TYT'); // 'TYT' or 'AYT' or 'BOTH'
+  const [stage, setStage] = useState('TYT'); // 'TYT' or 'AYT'
   const [title, setTitle] = useState('');
   const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
   const [institution, setInstitution] = useState('');
@@ -46,7 +46,7 @@ export default function ExamEntryModal({ isOpen, onClose, onSave, editingExam })
 
   const resetSubjectsForStage = (targetStage) => {
     const initial = {};
-    if (targetStage === 'TYT' || targetStage === 'BOTH') {
+    if (targetStage === 'TYT') {
       EXAM_STAGES.TYT.subjects.forEach(sub => {
         initial[sub.id] = {
           questionCount: sub.defaultQuestions,
@@ -56,8 +56,7 @@ export default function ExamEntryModal({ isOpen, onClose, onSave, editingExam })
           net: 0
         };
       });
-    }
-    if (targetStage === 'AYT' || targetStage === 'BOTH') {
+    } else if (targetStage === 'AYT') {
       EXAM_STAGES.AYT.subjects.forEach(sub => {
         initial[sub.id] = {
           questionCount: sub.defaultQuestions,
@@ -159,14 +158,10 @@ export default function ExamEntryModal({ isOpen, onClose, onSave, editingExam })
 
   // Gösterilecek dersleri listele
   const getDisplaySubjects = () => {
-    const list = [];
-    if (stage === 'TYT' || stage === 'BOTH') {
-      EXAM_STAGES.TYT.subjects.forEach(s => list.push({ ...s, stageType: 'TYT' }));
+    if (stage === 'TYT') {
+      return EXAM_STAGES.TYT.subjects.map(s => ({ ...s, stageType: 'TYT' }));
     }
-    if (stage === 'AYT' || stage === 'BOTH') {
-      EXAM_STAGES.AYT.subjects.forEach(s => list.push({ ...s, stageType: 'AYT' }));
-    }
-    return list;
+    return EXAM_STAGES.AYT.subjects.map(s => ({ ...s, stageType: 'AYT' }));
   };
 
   return (
@@ -204,18 +199,18 @@ export default function ExamEntryModal({ isOpen, onClose, onSave, editingExam })
             <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
               Sınav Aşaması Seçimi
             </label>
-            <div className="grid grid-cols-3 gap-2 sm:gap-3">
+            <div className="grid grid-cols-2 gap-3 sm:gap-4">
               <button
                 type="button"
                 onClick={() => handleStageChange('TYT')}
-                className={`py-3 px-3 rounded-xl border text-center transition-all flex flex-col items-center gap-1 ${
+                className={`py-3.5 px-4 rounded-2xl border text-center transition-all flex flex-col items-center gap-1 ${
                   stage === 'TYT'
-                    ? 'bg-indigo-600 text-white border-indigo-600 shadow-md shadow-indigo-200 font-bold'
+                    ? 'bg-indigo-600 text-white border-indigo-600 shadow-md shadow-indigo-200 font-bold scale-[1.01]'
                     : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50 font-semibold'
                 }`}
               >
-                <span className="text-sm">1. Aşama (TYT)</span>
-                <span className={`text-[10px] ${stage === 'TYT' ? 'text-indigo-100' : 'text-slate-400'}`}>
+                <span className="text-sm sm:text-base font-extrabold">1. Aşama (TYT)</span>
+                <span className={`text-[11px] ${stage === 'TYT' ? 'text-indigo-100' : 'text-slate-400'}`}>
                   Temel Yeterlilik (120 Soru)
                 </span>
               </button>
@@ -223,30 +218,15 @@ export default function ExamEntryModal({ isOpen, onClose, onSave, editingExam })
               <button
                 type="button"
                 onClick={() => handleStageChange('AYT')}
-                className={`py-3 px-3 rounded-xl border text-center transition-all flex flex-col items-center gap-1 ${
+                className={`py-3.5 px-4 rounded-2xl border text-center transition-all flex flex-col items-center gap-1 ${
                   stage === 'AYT'
-                    ? 'bg-purple-600 text-white border-purple-600 shadow-md shadow-purple-200 font-bold'
+                    ? 'bg-purple-600 text-white border-purple-600 shadow-md shadow-purple-200 font-bold scale-[1.01]'
                     : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50 font-semibold'
                 }`}
               >
-                <span className="text-sm">2. Aşama (AYT - EA)</span>
-                <span className={`text-[10px] ${stage === 'AYT' ? 'text-purple-100' : 'text-slate-400'}`}>
+                <span className="text-sm sm:text-base font-extrabold">2. Aşama (AYT - EA)</span>
+                <span className={`text-[11px] ${stage === 'AYT' ? 'text-purple-100' : 'text-slate-400'}`}>
                   Eşit Ağırlık Alanı (80 Soru)
-                </span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => handleStageChange('BOTH')}
-                className={`py-3 px-3 rounded-xl border text-center transition-all flex flex-col items-center gap-1 ${
-                  stage === 'BOTH'
-                    ? 'bg-slate-800 text-white border-slate-800 shadow-md shadow-slate-300 font-bold'
-                    : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50 font-semibold'
-                }`}
-              >
-                <span className="text-sm">Karma / Tam YKS</span>
-                <span className={`text-[10px] ${stage === 'BOTH' ? 'text-slate-300' : 'text-slate-400'}`}>
-                  1. + 2. Aşama Birlikte
                 </span>
               </button>
             </div>

@@ -20,8 +20,8 @@ export default function SubjectAnalysis({ exams }) {
     if (stageKey === 'AYT') setActiveSubjectId('ayt_matematik');
   };
 
-  // İlgili aşamadaki denemeleri al
-  const stageExams = exams.filter(e => e.stage === selectedStage || e.stage === 'BOTH');
+  // İlgili aşamadaki denemeleri al (1. Aşama ve 2. Aşama bağımsız yapılır)
+  const stageExams = exams.filter(e => e.stage === selectedStage);
 
   // Ders istatistiklerini hesapla
   const calculateSubjectStats = (subId) => {
