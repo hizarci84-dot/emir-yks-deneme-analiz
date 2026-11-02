@@ -3,7 +3,7 @@ import {
   TrendingUp, Award, Target, BookOpen, Clock, Calendar, 
   ChevronRight, Sparkles, AlertCircle, Share2, Edit2, Trash2, 
   CheckCircle, ArrowUpRight, ArrowDownRight, Layers, HelpCircle,
-  Calculator, GraduationCap, X, ExternalLink
+  Calculator, GraduationCap, X, ExternalLink, Search, Info, Check
 } from 'lucide-react';
 import { StorageService } from '../services/storage';
 import { 
@@ -28,6 +28,9 @@ export default function Dashboard({
   const [chartView, setChartView] = useState('ALL'); // 'ALL', 'TYT', 'AYT'
   const [activeChartExam, setActiveChartExam] = useState(null);
   const [examReportModal, setExamReportModal] = useState(null);
+  const [pairedExamId, setPairedExamId] = useState('AVERAGE'); // 'AVERAGE' or specific exam ID
+  const [modalActiveTab, setModalActiveTab] = useState('ELIGIBLE'); // 'ELIGIBLE' or 'ALL'
+  const [modalSearchQuery, setModalSearchQuery] = useState('');
 
   // Öğrenci Ayarları (Diploma Notu)
   const settings = StorageService.getSettings();
@@ -47,32 +50,123 @@ export default function Dashboard({
     };
   }, [exams, obpInfo]);
 
-  // İncelenen sınavın girebileceği bölümleri hesapla
+  // Sınav Rapor Modalı Açma Yardımcısı
+  const handleOpenExamReport = (exam) => {
+    setExamReportModal(exam);
+    setPairedExamId('AVERAGE');
+    setModalActiveTab('ELIGIBLE');
+    setModalSearchQuery('');
+  };
+
+  // İncelenen sınavın girebileceği bölümleri ve 1. + 2. Aşama birleşik puanını hesapla
   const examReportData = useMemo(() => {
     if (!examReportModal) return null;
-    const perf = calculateIndividualExamScore(examReportModal, exams, settings.diplomaGrade, settings.isObpBroken);
+
+    const isTyt = examReportModal.stage === 'TYT';
+    const complementaryExams = exams.filter(e => isTyt ? e.stage === 'AYT' : e.stage === 'TYT');
+
+    let customPairedNets = null;
+    let customPairedLabel = '';
+
+    if (pairedExamId !== 'AVERAGE') {
+      const selectedPair = exams.find(e => e.id === pairedExamId);
+      if (selectedPair) {
+        if (isTyt) {
+          customPairedNets = {
+            aytMatematik: selectedPair.subjects?.ayt_matematik?.net || 0,
+            aytEdebiyat: selectedPair.subjects?.ayt_edebiyat?.net || 0,
+            aytTarih1: selectedPair.subjects?.ayt_tarih1?.net || 0,
+            aytCografya1: selectedPair.subjects?.ayt_cografya1?.net || 0,
+          };
+          customPairedLabel = `${selectedPair.title} (${selectedPair.totalNet.toFixed(1)} Net)`;
+        } else {
+          customPairedNets = {
+            tytTurkce: selectedPair.subjects?.tyt_turkce?.net || 0,
+            tytMatematik: selectedPair.subjects?.tyt_matematik?.net || 0,
+            tytSosyal: selectedPair.subjects?.tyt_sosyal?.net || 0,
+            tytFen: selectedPair.subjects?.tyt_fen?.net || 0,
+          };
+          customPairedLabel = `${selectedPair.title} (${selectedPair.totalNet.toFixed(1)} Net)`;
+        }
+      }
+    }
+
+    const perf = calculateIndividualExamScore(
+      examReportModal, 
+      exams, 
+      settings.diplomaGrade, 
+      settings.isObpBroken,
+      customPairedNets,
+      customPairedLabel
+    );
+
     const userRank = perf.ranking.midRank;
 
-    const matched = YOK_ATLAS_PROGRAMS.map(prog => {
+    // Tüm YÖK Atlas programlarını sıralama ve puana göre sınıflandır
+    const allMapped = YOK_ATLAS_PROGRAMS.map(prog => {
       let status = 'HEDEF';
-      if (userRank <= prog.rank * 0.9) status = 'GARANTI';
-      else if (userRank <= prog.rank * 1.25) status = 'HEDEF';
-      else status = 'GAYRET';
+      let statusLabel = 'Hedef Bandında';
+      let statusColor = 'indigo';
 
+      if (userRank <= prog.rank * 0.90) {
+        status = 'GARANTI';
+        statusLabel = 'Rahat Girer';
+        statusColor = 'emerald';
+      } else if (userRank <= prog.rank * 1.18) {
+        status = 'HEDEF';
+        statusLabel = 'Hedef Bandı';
+        statusColor = 'indigo';
+      } else {
+        status = 'GAYRET';
+        statusLabel = 'Daha Fazla Net Lazım';
+        statusColor = 'rose';
+      }
+
+      const diff = userRank - prog.rank;
       return {
         ...prog,
         status,
-        rankDiff: userRank - prog.rank
+        statusLabel,
+        statusColor,
+        rankDiff: diff
       };
     }).sort((a, b) => a.rank - b.rank);
 
+    // Arama filtrelemesi
+    const query = modalSearchQuery.trim().toLowerCase();
+    const searchFiltered = query 
+      ? allMapped.filter(p => 
+          p.university.toLowerCase().includes(query) ||
+          p.department.toLowerCase().includes(query) ||
+          p.city.toLowerCase().includes(query) ||
+          String(p.kilavuzKodu).includes(query)
+        )
+      : allMapped;
+
+    // Kazanabileceği ve Hedefteki Bölümler (Garanti + Hedef)
+    let eligibleList = searchFiltered.filter(p => p.status === 'GARANTI' || p.status === 'HEDEF');
+    // Eğer filtre araması yoksa ve hiçbir bölüm eşleşmemişse, öğrencinin sıralamasına en yakın bölümleri göster
+    if (eligibleList.length === 0 && !query) {
+      eligibleList = [...allMapped].sort((a, b) => Math.abs(a.rank - userRank) - Math.abs(b.rank - userRank)).slice(0, 10);
+    }
+
+    const guaranteed = searchFiltered.filter(p => p.status === 'GARANTI');
+    const targets = searchFiltered.filter(p => p.status === 'HEDEF');
+    const reach = searchFiltered.filter(p => p.status === 'GAYRET');
+
     return {
       perf,
-      targets: matched.filter(p => p.status === 'HEDEF').slice(0, 6),
-      guaranteed: matched.filter(p => p.status === 'GARANTI').slice(0, 4),
-      reach: matched.filter(p => p.status === 'GAYRET').slice(0, 3)
+      userRank,
+      complementaryExams,
+      allMapped: searchFiltered,
+      totalDatabaseCount: YOK_ATLAS_PROGRAMS.length,
+      eligibleList,
+      guaranteed,
+      targets,
+      reach,
+      pairedLabel: perf.pairedLabel
     };
-  }, [examReportModal, exams, settings.diplomaGrade, settings.isObpBroken]);
+  }, [examReportModal, exams, settings.diplomaGrade, settings.isObpBroken, pairedExamId, modalSearchQuery]);
 
   // Filtrelenmiş denemeler
   const filteredExams = exams.filter(e => {
@@ -785,7 +879,7 @@ export default function Dashboard({
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
-                          setExamReportModal(exam);
+                          handleOpenExamReport(exam);
                         }}
                         className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold text-xs shadow-md shadow-indigo-200 transition active:scale-95"
                         title="Bu Sınavla Girebileceği Üniversite Bölümlerini Gör"
@@ -885,173 +979,419 @@ export default function Dashboard({
 
       {/* 5. SEÇİLEN SINAVIN YKS KARNESİ & GİREBİLECEĞİ BÖLÜMLER MODALI */}
       {examReportModal && examReportData && (
-        <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-3 sm:p-5 animate-in fade-in duration-200">
-          <div className="bg-white rounded-3xl shadow-2xl w-full max-w-3xl overflow-hidden border border-slate-200 animate-in zoom-in-95 duration-150">
+        <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/65 backdrop-blur-sm flex items-center justify-center p-2 sm:p-4 animate-in fade-in duration-200">
+          <div className="bg-white rounded-3xl shadow-2xl w-full max-w-4xl overflow-hidden border border-slate-200 animate-in zoom-in-95 duration-150 my-6">
             
             {/* Modal Üst Başlığı */}
             <div className="p-5 sm:p-6 bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white flex items-start justify-between">
               <div>
-                <div className="flex items-center gap-2 mb-1">
+                <div className="flex items-center gap-2 mb-1.5 flex-wrap">
                   <span className={`text-[10px] font-black px-2.5 py-0.5 rounded-full ${examReportModal.stage === 'TYT' ? 'bg-indigo-600' : 'bg-purple-600'}`}>
                     {examReportModal.stage === 'TYT' ? '1. Aşama (TYT)' : '2. Aşama (AYT)'}
                   </span>
                   <span className="text-xs text-slate-300 font-medium">📅 {examReportModal.date}</span>
+                  <span className="text-[10px] bg-white/10 px-2 py-0.5 rounded-full text-slate-200">
+                    {examReportModal.institution || 'Genel Deneme'}
+                  </span>
                 </div>
-                <h3 className="text-base sm:text-xl font-black">
+                <h3 className="text-lg sm:text-2xl font-black text-white">
                   {examReportModal.title}
                 </h3>
                 <p className="text-xs text-indigo-200 font-medium mt-0.5">
-                  Özel Sınav Karnesi & Bu Deneme Performansıyla Kazanabileceğin Bölümler
+                  Özel Sınav Karnesi & 1. ve 2. Aşama Birlikte YKS Yerleştirme Puanı & YÖK Atlas Tercih Rehberi
                 </p>
               </div>
 
               <button
                 onClick={() => setExamReportModal(null)}
-                className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition"
+                className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition flex-shrink-0"
               >
                 <X className="w-4 h-4" />
               </button>
             </div>
 
             {/* Modal Gövdesi */}
-            <div className="p-5 sm:p-6 space-y-6 max-h-[75vh] overflow-y-auto">
-              
-              {/* Puan ve Sıralama Gösterge Kutusu */}
-              <div className="bg-gradient-to-br from-indigo-50 to-purple-50 p-4 sm:p-5 rounded-2xl border border-indigo-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                <div>
-                  <span className="text-[11px] font-bold text-indigo-700 uppercase tracking-wider block">
-                    Bu Sınav Doğrultusunda Hesaplanan YKS Puanı
-                  </span>
-                  <div className="flex items-baseline gap-2 mt-0.5">
-                    <span className="text-3xl sm:text-4xl font-black text-slate-900">
-                      {examReportData.perf.eaResult.placementScore.toFixed(3)}
-                    </span>
-                    <span className="text-xs text-slate-500 font-bold">
-                      Y-EA (Yerleştirme Puanı)
-                    </span>
-                  </div>
-                  <span className="text-[11px] text-slate-500 mt-0.5 block">
-                    Ham Puan: <b>{examReportData.perf.eaResult.rawScore.toFixed(2)}</b> • OBP Katkısı: <b className="text-indigo-700">+{obpInfo.contribution}</b>
+            <div className="p-4 sm:p-6 space-y-6 max-h-[78vh] overflow-y-auto">
+
+              {/* 1. KISIM: İNCELENEN SINAVIN DERS BAZLI NETLERİ */}
+              <div>
+                <div className="flex items-center justify-between mb-2">
+                  <h4 className="text-xs font-black uppercase tracking-wider text-slate-700 flex items-center gap-1.5">
+                    <BookOpen className="w-4 h-4 text-indigo-600" />
+                    Bu Sınavın Ders Bazlı Net Sonuçları
+                  </h4>
+                  <span className="text-xs font-black text-indigo-700 bg-indigo-50 px-2.5 py-1 rounded-lg border border-indigo-100">
+                    Toplam: {examReportModal.totalNet.toFixed(2)} Net
                   </span>
                 </div>
 
-                <div className="bg-white p-3.5 rounded-xl border border-indigo-200 text-center sm:text-right shadow-sm">
-                  <span className="text-[10px] font-bold text-amber-700 uppercase block">Tahmini Türkiye Sıralaması</span>
-                  <span className="text-xl sm:text-2xl font-black text-amber-600 block">
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+                  {Object.entries(examReportModal.subjects || {}).map(([key, sub]) => {
+                    const cleanName = key.replace('tyt_', '').replace('ayt_', '').toUpperCase();
+                    return (
+                      <div key={key} className="bg-slate-50 p-3 rounded-2xl border border-slate-200/90 text-center">
+                        <span className="text-[11px] font-extrabold text-slate-700 block truncate">{cleanName}</span>
+                        <span className="text-base font-black text-indigo-600 block mt-0.5">{sub.net.toFixed(2)} Net</span>
+                        <div className="mt-1 text-[10px] text-slate-400 font-bold flex justify-center gap-1.5 border-t border-slate-200/60 pt-1">
+                          <span className="text-emerald-600">{sub.correct}D</span>
+                          <span className="text-rose-600">{sub.wrong}Y</span>
+                          <span className="text-amber-600">{sub.blank}B</span>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+
+                {/* Eğer TYT Sınavı ise Müstakil TYT Skoru */}
+                {examReportModal.stage === 'TYT' && examReportData.perf.tytResult && (
+                  <div className="mt-2.5 p-2.5 rounded-xl bg-slate-100/90 border border-slate-200 flex flex-wrap items-center justify-between gap-2 text-xs">
+                    <span className="font-bold text-slate-700">
+                      🎯 TYT Müstakil Sınav Sonucu:
+                    </span>
+                    <div className="flex items-center gap-2 text-[11px]">
+                      <span>Ham: <b className="text-slate-900">{examReportData.perf.tytResult.rawScore.toFixed(2)}</b></span>
+                      <span>•</span>
+                      <span>Y-TYT (OBP'li): <b className="text-indigo-700">{examReportData.perf.tytResult.placementScore.toFixed(2)}</b></span>
+                      <span>•</span>
+                      <span>TYT Sıralaması: <b className="text-indigo-800">{examReportData.perf.tytResult.ranking.rankString}</b> ({examReportData.perf.tytResult.ranking.percentile})</span>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* 2. KISIM: 1. AŞAMA VE 2. AŞAMA BİRLİKTE ÇALIŞMA MEKANİZMASI & TAMAMLAYICI EŞLEŞTİRME */}
+              <div className="bg-indigo-50/70 border-2 border-indigo-200 rounded-3xl p-4 sm:p-5 space-y-4">
+                <div className="flex items-start gap-3">
+                  <div className="w-8 h-8 rounded-xl bg-indigo-600 text-white flex items-center justify-center flex-shrink-0 shadow-sm">
+                    <Layers className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-black text-indigo-950 flex items-center gap-2">
+                      1. Aşama ve 2. Aşama Birlikte Çalışma Prensibi
+                      <span className="text-[10px] font-bold bg-indigo-200 text-indigo-900 px-2 py-0.5 rounded-full">
+                        Resmi ÖSYM Kuralı
+                      </span>
+                    </h4>
+                    <p className="text-xs text-indigo-900/80 mt-1 leading-relaxed">
+                      YKS Eşit Ağırlık yerleştirme puanı (Y-EA) ve Türkiye sıralaması tek başına bir aşamadan hesaplanamaz. 
+                      <b> 1. Aşama (TYT - %40 etki)</b> ve <b>2. Aşama (AYT - %60 etki)</b> birlikte çalışır; üzerine <b>Diploma Notu (OBP)</b> eklenir. 
+                      Aşağıda bu sınavınız ile birlikte çalışan diğer aşamayı eşleştirebilirsiniz:
+                    </p>
+                  </div>
+                </div>
+
+                {/* Aşama Eşleştirme Kartı */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1">
+                  
+                  {/* Sol: İncelenen Sınav (Sabit) */}
+                  <div className="bg-white p-3.5 rounded-2xl border border-indigo-200 shadow-sm">
+                    <div className="flex items-center justify-between mb-1">
+                      <span className="text-[10px] font-extrabold text-indigo-600 uppercase tracking-wider">
+                        {examReportModal.stage === 'TYT' ? '1. Aşama (TYT) • Bu Deneme' : '2. Aşama (AYT) • Bu Deneme'}
+                      </span>
+                      <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-800">
+                        {examReportModal.stage === 'TYT' ? '%40 Ağırlık' : '%60 Ağırlık'}
+                      </span>
+                    </div>
+                    <div className="font-extrabold text-slate-900 text-sm truncate">
+                      {examReportModal.title}
+                    </div>
+                    <div className="flex items-baseline justify-between mt-2 pt-2 border-t border-slate-100">
+                      <span className="text-xs text-slate-500 font-semibold">
+                        {examReportModal.totalNet.toFixed(1)} Net
+                      </span>
+                      <span className="text-xs font-black text-indigo-700">
+                        Katkı: +{examReportModal.stage === 'TYT' 
+                          ? examReportData.perf.eaResult.tytContribution.toFixed(2) 
+                          : examReportData.perf.eaResult.aytContribution.toFixed(2)} Puan
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Sağ: Tamamlayıcı Birlikte Çalışan Aşama (Seçilebilir) */}
+                  <div className="bg-white p-3.5 rounded-2xl border border-indigo-200 shadow-sm">
+                    <div className="flex items-center justify-between mb-1">
+                      <span className="text-[10px] font-extrabold text-purple-600 uppercase tracking-wider">
+                        {examReportModal.stage === 'TYT' ? '2. Aşama (AYT) • Tamamlayıcı Eşleşen' : '1. Aşama (TYT) • Tamamlayıcı Eşleşen'}
+                      </span>
+                      <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-purple-100 text-purple-800">
+                        {examReportModal.stage === 'TYT' ? '%60 Ağırlık' : '%40 Ağırlık'}
+                      </span>
+                    </div>
+
+                    {/* Sınav Seçici Dropdown */}
+                    <select
+                      value={pairedExamId}
+                      onChange={(e) => setPairedExamId(e.target.value)}
+                      className="w-full text-xs font-bold text-slate-800 bg-slate-50 border border-slate-300 rounded-xl px-2.5 py-1.5 focus:outline-none focus:ring-2 focus:ring-purple-500 cursor-pointer"
+                    >
+                      <option value="AVERAGE">
+                        📌 Emir'in {examReportModal.stage === 'TYT' ? 'AYT' : 'TYT'} Deneme Ortalaması ({examReportModal.stage === 'TYT' ? avgAytNet : avgTytNet} Net)
+                      </option>
+                      {examReportData.complementaryExams.map(ex => (
+                        <option key={ex.id} value={ex.id}>
+                          📝 {ex.title} ({ex.totalNet.toFixed(1)} Net - {ex.date})
+                        </option>
+                      ))}
+                    </select>
+
+                    <div className="flex items-baseline justify-between mt-2 pt-2 border-t border-slate-100">
+                      <span className="text-xs text-slate-500 font-semibold truncate">
+                        {examReportModal.stage === 'TYT' 
+                          ? `${examReportData.perf.eaResult.aytTotalNet.toFixed(1)} Net`
+                          : `${examReportData.perf.eaResult.tytTotalNet.toFixed(1)} Net`}
+                      </span>
+                      <span className="text-xs font-black text-purple-700">
+                        Katkı: +{examReportModal.stage === 'TYT' 
+                          ? examReportData.perf.eaResult.aytContribution.toFixed(2) 
+                          : examReportData.perf.eaResult.tytContribution.toFixed(2)} Puan
+                      </span>
+                    </div>
+                  </div>
+
+                </div>
+
+                {/* Formül Özeti */}
+                <div className="p-2.5 rounded-xl bg-white/80 border border-indigo-100 text-[11px] text-slate-600 flex flex-wrap items-center justify-between gap-1 font-semibold">
+                  <span>
+                    Formül: 100 Taban + {examReportData.perf.eaResult.tytContribution.toFixed(1)} (TYT %40) + {examReportData.perf.eaResult.aytContribution.toFixed(1)} (AYT %60) + {obpInfo.contribution} (OBP)
+                  </span>
+                  <span className="text-indigo-900 font-black">
+                    = {examReportData.perf.eaResult.placementScore.toFixed(3)} Y-EA
+                  </span>
+                </div>
+              </div>
+
+              {/* 3. KISIM: BİRLEŞİK PUAN VE SIRALAMA GÖSTERGE KARTLARI */}
+              <div className="bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 text-white p-4 sm:p-5 rounded-3xl shadow-lg flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                  <span className="text-[11px] font-bold text-indigo-300 uppercase tracking-wider block">
+                    1. ve 2. Aşama Birlikte Hesaplanan YKS Puanı
+                  </span>
+                  <div className="flex items-baseline gap-2 mt-1">
+                    <span className="text-3xl sm:text-4xl font-black text-white">
+                      {examReportData.perf.eaResult.placementScore.toFixed(3)}
+                    </span>
+                    <span className="text-xs text-indigo-200 font-bold">
+                      Y-EA (Yerleştirme Puanı)
+                    </span>
+                  </div>
+                  <span className="text-[11px] text-slate-300 mt-1 block">
+                    Ham EA: <b>{examReportData.perf.eaResult.rawScore.toFixed(2)}</b> • OBP Katkısı: <b className="text-emerald-300">+{obpInfo.contribution}</b> (Diploma Notu: {obpInfo.diplomaGrade})
+                  </span>
+                </div>
+
+                <div className="bg-white/10 backdrop-blur-md p-4 rounded-2xl border border-white/20 text-center sm:text-right">
+                  <span className="text-[10px] font-bold text-amber-300 uppercase block tracking-wider">Tahmini Türkiye Sıralaması (Y-EA)</span>
+                  <span className="text-2xl sm:text-3xl font-black text-amber-400 block mt-0.5">
                     {examReportData.perf.ranking.rankString}
                   </span>
-                  <span className="text-[10px] font-bold text-slate-500">
+                  <span className="text-[11px] font-bold text-slate-200">
                     {examReportData.perf.ranking.percentile}
                   </span>
                 </div>
               </div>
 
-              {/* Sınav Net Dökümü */}
-              <div>
-                <h4 className="text-xs font-black uppercase tracking-wider text-slate-700 mb-2">
-                  Ders Bazlı Net Sonuçları (Toplam: {examReportModal.totalNet.toFixed(2)} Net)
-                </h4>
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                  {Object.entries(examReportModal.subjects || {}).map(([key, sub]) => {
-                    const cleanName = key.replace('tyt_', '').replace('ayt_', '').toUpperCase();
-                    return (
-                      <div key={key} className="bg-slate-50 p-2.5 rounded-xl border border-slate-200 text-center">
-                        <span className="text-[11px] font-extrabold text-slate-800 block truncate">{cleanName}</span>
-                        <span className="text-sm font-black text-indigo-600 block mt-0.5">{sub.net.toFixed(2)} Net</span>
-                        <span className="text-[10px] text-slate-400 font-semibold">{sub.correct}D {sub.wrong}Y {sub.blank}B</span>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-
-              {/* Girebileceği Üniversite Bölümleri (YÖK Atlas) */}
+              {/* 4. KISIM: YÖK ATLAS LİSANS PROGRAMLARI (KAZANABİLECEĞİ + BÜTÜN BÖLÜMLER) */}
               <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <h4 className="text-xs font-black uppercase tracking-wider text-slate-900 flex items-center gap-1.5">
-                    <GraduationCap className="w-4 h-4 text-indigo-600" />
-                    Bu Sınav Performansıyla Girebileceğin YÖK Atlas Programları
-                  </h4>
-                  <span className="text-[11px] text-slate-500 font-semibold">
-                    Tahmini #{examReportData.perf.ranking.midRank.toLocaleString()} Sıralama Baz Alındı
-                  </span>
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                  <div>
+                    <h4 className="text-xs sm:text-sm font-black uppercase tracking-wider text-slate-900 flex items-center gap-1.5">
+                      <GraduationCap className="w-5 h-5 text-indigo-600" />
+                      YÖK Atlas Lisans Programları ({examReportData.totalDatabaseCount} Program)
+                    </h4>
+                    <p className="text-[11px] text-slate-500 font-medium">
+                      Bu sınav doğrultusunda tahmini <b>#{examReportData.userRank.toLocaleString()}</b> sıralamanıza göre üniversiteler listelenmiştir.
+                    </p>
+                  </div>
                 </div>
 
-                {/* Hedefteki Bölümler */}
-                <div className="space-y-2">
-                  {examReportData.targets.map(prog => (
-                    <div key={prog.id} className="p-3 rounded-2xl bg-indigo-50/60 border border-indigo-200/80 flex items-center justify-between gap-3">
-                      <div>
-                        <div className="flex items-center gap-2">
-                          <span className="text-xs font-black text-slate-900">{prog.university}</span>
-                          <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-800">
-                            ÖSYM Kodu: {prog.kilavuzKodu}
-                          </span>
+                {/* Arama Çubuğu */}
+                <div className="relative">
+                  <Search className="absolute left-3.5 top-3 w-4 h-4 text-slate-400" />
+                  <input
+                    type="text"
+                    value={modalSearchQuery}
+                    onChange={(e) => setModalSearchQuery(e.target.value)}
+                    placeholder="Üniversite, bölüm veya şehir ara... (örn: Hukuk, YBS, Akdeniz, Marmara, Ankara)"
+                    className="w-full pl-10 pr-9 py-2.5 rounded-2xl border border-slate-200 bg-slate-50 text-xs font-semibold text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition"
+                  />
+                  {modalSearchQuery && (
+                    <button
+                      onClick={() => setModalSearchQuery('')}
+                      className="absolute right-3 top-2.5 text-slate-400 hover:text-slate-600 p-0.5 rounded-full hover:bg-slate-200"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  )}
+                </div>
+
+                {/* Sekmeler (Tabs): Kazanabileceği Bölümler vs Bütün Bölümler */}
+                <div className="flex items-center gap-2 border-b border-slate-200 pb-2">
+                  <button
+                    onClick={() => setModalActiveTab('ELIGIBLE')}
+                    className={`px-3 py-1.5 rounded-xl text-xs font-black transition flex items-center gap-1.5 ${
+                      modalActiveTab === 'ELIGIBLE'
+                        ? 'bg-indigo-600 text-white shadow-sm'
+                        : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                    }`}
+                  >
+                    🎯 Kazanabileceği & Hedef Bölümler
+                    <span className={`text-[10px] px-1.5 py-0.2 rounded-full ${modalActiveTab === 'ELIGIBLE' ? 'bg-indigo-700 text-white' : 'bg-slate-200 text-slate-700'}`}>
+                      {examReportData.eligibleList.length}
+                    </span>
+                  </button>
+
+                  <button
+                    onClick={() => setModalActiveTab('ALL')}
+                    className={`px-3 py-1.5 rounded-xl text-xs font-black transition flex items-center gap-1.5 ${
+                      modalActiveTab === 'ALL'
+                        ? 'bg-slate-900 text-white shadow-sm'
+                        : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                    }`}
+                  >
+                    📚 Bütün YÖK Atlas Bölümleri
+                    <span className={`text-[10px] px-1.5 py-0.2 rounded-full ${modalActiveTab === 'ALL' ? 'bg-slate-700 text-white' : 'bg-slate-200 text-slate-700'}`}>
+                      {examReportData.allMapped.length}
+                    </span>
+                  </button>
+                </div>
+
+                {/* Program Listesi */}
+                <div className="space-y-2.5 max-h-[42vh] overflow-y-auto pr-1">
+                  {(() => {
+                    const listToDisplay = modalActiveTab === 'ELIGIBLE' 
+                      ? examReportData.eligibleList 
+                      : examReportData.allMapped;
+
+                    if (listToDisplay.length === 0) {
+                      return (
+                        <div className="p-8 text-center bg-slate-50 rounded-2xl border border-dashed border-slate-200">
+                          <AlertCircle className="w-8 h-8 text-slate-400 mx-auto mb-2" />
+                          <p className="text-xs font-bold text-slate-700">Aramanıza uygun program bulunamadı.</p>
+                          <p className="text-[11px] text-slate-400 mt-0.5">Lütfen arama terimini değiştirin veya sekmeler arasında geçiş yapın.</p>
+                          {modalSearchQuery && (
+                            <button
+                              onClick={() => setModalSearchQuery('')}
+                              className="mt-3 px-3 py-1.5 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-800 text-xs font-bold"
+                            >
+                              Aramayı Temizle
+                            </button>
+                          )}
                         </div>
-                        <span className="text-xs text-indigo-900 font-semibold block">{prog.department}</span>
-                        <span className="text-[10px] text-slate-500">
-                          2024 Sıralama: #{prog.rank.toLocaleString()} • Taban Puan: {prog.baseScore}
-                        </span>
-                      </div>
+                      );
+                    }
 
-                      <button
-                        onClick={() => {
-                          setExamReportModal(null);
-                          onNavigateToTab('yokatlas');
-                        }}
-                        className="px-3 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs shadow-sm flex-shrink-0"
-                      >
-                        YÖK Atlas'ta Gör
-                      </button>
-                    </div>
-                  ))}
+                    return listToDisplay.map((prog) => {
+                      const isGuaranteed = prog.status === 'GARANTI';
+                      const isTarget = prog.status === 'HEDEF';
+                      const isReach = prog.status === 'GAYRET';
 
-                  {/* Rahat Kazanabileceği Güvenli Bölümler */}
-                  {examReportData.guaranteed.map(prog => (
-                    <div key={prog.id} className="p-3 rounded-2xl bg-emerald-50/50 border border-emerald-200/80 flex items-center justify-between gap-3">
-                      <div>
-                        <div className="flex items-center gap-2">
-                          <span className="text-xs font-black text-slate-900">{prog.university}</span>
-                          <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800">
-                            Garanti Bandında
-                          </span>
+                      return (
+                        <div 
+                          key={prog.id} 
+                          className={`p-3.5 rounded-2xl border transition hover:shadow-md flex flex-col sm:flex-row sm:items-center justify-between gap-3 ${
+                            isGuaranteed 
+                              ? 'bg-emerald-50/50 border-emerald-200' 
+                              : isTarget 
+                                ? 'bg-indigo-50/60 border-indigo-200' 
+                                : 'bg-slate-50/70 border-slate-200'
+                          }`}
+                        >
+                          <div className="space-y-1">
+                            <div className="flex items-center gap-2 flex-wrap">
+                              <span className="text-xs font-black text-slate-900">
+                                {prog.university}
+                              </span>
+                              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-200/80 text-slate-700">
+                                {prog.city}
+                              </span>
+                              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-600">
+                                Kod: {prog.kilavuzKodu}
+                              </span>
+                            </div>
+
+                            <div className="text-xs font-bold text-indigo-950 flex items-center gap-1.5 flex-wrap">
+                              <span>{prog.department}</span>
+                              <span className="text-[10px] font-medium text-slate-500">
+                                • {prog.faculty}
+                              </span>
+                            </div>
+
+                            <div className="flex items-center gap-2 text-[10px] text-slate-500 font-semibold flex-wrap">
+                              <span>2024 Taban Sıralama: <b className="text-slate-800">#{prog.rank.toLocaleString()}</b></span>
+                              <span>•</span>
+                              <span>Taban Puan: <b className="text-slate-800">{prog.baseScore}</b></span>
+                              <span>•</span>
+                              <span>Kontenjan: <b>{prog.quota}</b></span>
+                              <span>•</span>
+                              <span>Tür: <b>{prog.scholarship}</b></span>
+                            </div>
+                          </div>
+
+                          {/* Sağ Durum Rozeti ve Aksiyon Butonu */}
+                          <div className="flex items-center justify-between sm:justify-end gap-2.5 pt-2 sm:pt-0 border-t sm:border-t-0 border-slate-200/60 flex-shrink-0">
+                            {/* Durum Rozeti */}
+                            {isGuaranteed && (
+                              <span className="text-[11px] font-black px-2.5 py-1 rounded-xl bg-emerald-100 text-emerald-800 border border-emerald-200 flex items-center gap-1">
+                                <Check className="w-3.5 h-3.5 text-emerald-600" />
+                                Rahat Girer (+{Math.abs(prog.rankDiff).toLocaleString()} önde)
+                              </span>
+                            )}
+                            {isTarget && (
+                              <span className="text-[11px] font-black px-2.5 py-1 rounded-xl bg-indigo-100 text-indigo-800 border border-indigo-200">
+                                🟡 Hedef Bandında
+                              </span>
+                            )}
+                            {isReach && (
+                              <span className="text-[11px] font-black px-2.5 py-1 rounded-xl bg-rose-50 text-rose-700 border border-rose-200">
+                                🔴 Daha Fazla Net Lazım (-{Math.abs(prog.rankDiff).toLocaleString()} sıra)
+                              </span>
+                            )}
+
+                            <button
+                              onClick={() => {
+                                setExamReportModal(null);
+                                onNavigateToTab('yokatlas');
+                              }}
+                              className="px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-indigo-700 text-white font-bold text-xs shadow-sm transition active:scale-95 flex items-center gap-1"
+                            >
+                              <span>YÖK Atlas</span>
+                              <ExternalLink className="w-3 h-3 text-slate-300" />
+                            </button>
+                          </div>
                         </div>
-                        <span className="text-xs text-emerald-900 font-semibold block">{prog.department}</span>
-                        <span className="text-[10px] text-slate-500">
-                          2024 Sıralama: #{prog.rank.toLocaleString()} • Taban: {prog.baseScore}
-                        </span>
-                      </div>
-
-                      <button
-                        onClick={() => {
-                          setExamReportModal(null);
-                          onNavigateToTab('yokatlas');
-                        }}
-                        className="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-sm flex-shrink-0"
-                      >
-                        İncele
-                      </button>
-                    </div>
-                  ))}
+                      );
+                    });
+                  })()}
                 </div>
               </div>
 
-              {/* Koç Notu */}
-              <div className="p-4 rounded-2xl bg-amber-50 border border-amber-200 text-xs text-amber-900 flex items-start gap-3">
+              {/* 5. KISIM: REHBERLİK VE KOÇ DEĞERLENDİRMESİ */}
+              <div className="p-4 rounded-2xl bg-amber-50 border border-amber-200 text-xs text-amber-950 flex items-start gap-3">
                 <Sparkles className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
-                <div>
-                  <span className="font-extrabold block">Rehberlik Değerlendirmesi:</span>
-                  Bu sınavda elde ettiğin <b>{examReportModal.totalNet.toFixed(1)} net</b>, OBP katkın ile birlikte seni Türkiye genelinde <b>{examReportData.perf.ranking.rankString}</b> bandına yerleştirmektedir. YÖK Atlas resmi verilerine göre yukarıdaki seçkin devlet ve vakıf lisans programlarına yerleşebilmektesin.
+                <div className="space-y-1">
+                  <span className="font-extrabold block text-amber-900">
+                    Özel Rehberlik & Strateji Değerlendirmesi:
+                  </span>
+                  <p className="leading-relaxed">
+                    Bu sınavda elde ettiğin <b>{examReportModal.totalNet.toFixed(1)} net</b>, eşleştirilen <b>{examReportData.pairedLabel}</b> ve <b>+{obpInfo.contribution} OBP katkın</b> ile birlikte seni Türkiye genelinde <b>{examReportData.perf.ranking.rankString}</b> bandına yerleştirmektedir.
+                    YÖK Atlas resmi verilerine göre bu performansla seçkin devlet ve vakıf lisans programlarına (Hukuk, Yönetim Bilişim Sistemleri, İktisat ve PDR gibi) rahatlıkla yerleşebilmektesin. 
+                    Hedefini daha da yukarı taşımak için 2. Aşama Matematik ve Edebiyat branşlarındaki her +2 net seni yaklaşık 6.000 ila 10.000 sıra ileri taşıyacaktır.
+                  </p>
                 </div>
               </div>
 
             </div>
 
             {/* Modal Alt Kapatma Barı */}
-            <div className="p-4 bg-slate-50 border-t border-slate-200 flex items-center justify-end gap-2">
+            <div className="p-4 bg-slate-50 border-t border-slate-200 flex items-center justify-between gap-2">
+              <span className="text-xs text-slate-500 font-semibold hidden sm:inline">
+                YÖK Atlas 2024 ve ÖSYM Türkiye Yığılma Verileri ile entegredir.
+              </span>
               <button
                 onClick={() => setExamReportModal(null)}
-                className="px-5 py-2.5 rounded-xl bg-slate-900 text-white font-bold text-xs shadow-sm hover:bg-slate-800 transition"
+                className="px-6 py-2.5 rounded-xl bg-slate-900 text-white font-black text-xs shadow-md hover:bg-slate-800 transition active:scale-95"
               >
                 Kapat
               </button>

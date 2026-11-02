@@ -134,6 +134,43 @@ export function calculateEaScore(tytNets = {}, aytNets = {}, obpContribution = 0
 }
 
 /**
+ * ÖSYM Resmi YKS TYT Sıralama Eğrisine Göre Yaklaşık Başarı Sırasını Tahmin Eder
+ * @param {number} placementScore - Yerleştirme TYT Puanı
+ */
+export function estimateTytRanking(placementScore) {
+  const p = Math.min(560, Math.max(150, parseFloat(placementScore) || 200));
+  const brackets = [
+    { minP: 490, minRank: 1, maxRank: 1200, pct: 'İlk %0.04 (Zirve Derece)' },
+    { minP: 450, minRank: 1200, maxRank: 8500, pct: 'İlk %0.28 (İlk 10 Bin)' },
+    { minP: 410, minRank: 8500, maxRank: 32000, pct: 'İlk %1.05 (İlk 35 Bin)' },
+    { minP: 370, minRank: 32000, maxRank: 85000, pct: 'İlk %2.80 (İlk 90 Bin)' },
+    { minP: 330, minRank: 85000, maxRank: 180000, pct: 'İlk %6.00' },
+    { minP: 290, minRank: 180000, maxRank: 360000, pct: 'İlk %12.00' },
+    { minP: 250, minRank: 360000, maxRank: 700000, pct: 'İlk %23.00' },
+    { minP: 200, minRank: 700000, maxRank: 1400000, pct: 'İlk %45.00' },
+    { minP: 0, minRank: 1400000, maxRank: 2800000, pct: '%50+' }
+  ];
+
+  let matched = brackets[brackets.length - 1];
+  for (let i = 0; i < brackets.length; i++) {
+    if (p >= brackets[i].minP) {
+      matched = brackets[i];
+      break;
+    }
+  }
+
+  const midRank = Math.round((matched.minRank + matched.maxRank) / 2);
+  return {
+    placementScore: p,
+    minRank: matched.minRank,
+    maxRank: matched.maxRank,
+    midRank,
+    rankString: `#${matched.minRank.toLocaleString()} - #${matched.maxRank.toLocaleString()}`,
+    percentile: matched.pct
+  };
+}
+
+/**
  * ÖSYM Resmi YKS EA Sıralama Eğrisine Göre Yaklaşık Başarı Sırasını Tahmin Eder
  * (2022, 2023 ve 2024 ÖSYM Eşit Ağırlık Yığılma Verileri)
  * @param {number} placementScore - Yerleştirme EA Puanı (örn: 485.6)
@@ -187,7 +224,14 @@ export function estimateEaRanking(placementScore) {
  * @param {number} diplomaGrade - 100 üzerinden diploma notu
  * @param {boolean} isBrokenObp - Kırık OBP durumu
  */
-export function calculateIndividualExamScore(exam, allExams = [], diplomaGrade = 88.5, isBrokenObp = false) {
+export function calculateIndividualExamScore(
+  exam, 
+  allExams = [], 
+  diplomaGrade = 88.5, 
+  isBrokenObp = false,
+  customPairedNets = null,
+  customPairedLabel = ''
+) {
   if (!exam) return null;
 
   const obpInfo = calculateObp(diplomaGrade, isBrokenObp);
@@ -199,6 +243,7 @@ export function calculateIndividualExamScore(exam, allExams = [], diplomaGrade =
 
   let activeTyt = {};
   let activeAyt = {};
+  let pairedLabel = customPairedLabel;
 
   if (isTyt) {
     // İncelenen sınavın TYT netleri
@@ -208,13 +253,23 @@ export function calculateIndividualExamScore(exam, allExams = [], diplomaGrade =
       tytSosyal: exam.subjects?.tyt_sosyal?.net || 0,
       tytFen: exam.subjects?.tyt_fen?.net || 0,
     };
-    // Tamamlayıcı olarak öğrencinin mevcut AYT net ortalamasını kullan
-    activeAyt = {
-      aytMatematik: allNets.ayt.aytMatematik || 20.0,
-      aytEdebiyat: allNets.ayt.aytEdebiyat || 17.0,
-      aytTarih1: allNets.ayt.aytTarih1 || 6.5,
-      aytCografya1: allNets.ayt.aytCografya1 || 3.5,
-    };
+    // Tamamlayıcı AYT
+    if (customPairedNets) {
+      activeAyt = {
+        aytMatematik: customPairedNets.aytMatematik ?? (customPairedNets.ayt_matematik?.net || 0),
+        aytEdebiyat: customPairedNets.aytEdebiyat ?? (customPairedNets.ayt_edebiyat?.net || 0),
+        aytTarih1: customPairedNets.aytTarih1 ?? (customPairedNets.ayt_tarih1?.net || 0),
+        aytCografya1: customPairedNets.aytCografya1 ?? (customPairedNets.ayt_cografya1?.net || 0),
+      };
+    } else {
+      activeAyt = {
+        aytMatematik: allNets.ayt.aytMatematik || 20.0,
+        aytEdebiyat: allNets.ayt.aytEdebiyat || 17.0,
+        aytTarih1: allNets.ayt.aytTarih1 || 6.5,
+        aytCografya1: allNets.ayt.aytCografya1 || 3.5,
+      };
+      if (!pairedLabel) pairedLabel = `Mevcut AYT Ortalaması (${(activeAyt.aytMatematik + activeAyt.aytEdebiyat + activeAyt.aytTarih1 + activeAyt.aytCografya1).toFixed(1)} Net)`;
+    }
   } else if (isAyt) {
     // İncelenen sınavın AYT netleri
     activeAyt = {
@@ -223,20 +278,31 @@ export function calculateIndividualExamScore(exam, allExams = [], diplomaGrade =
       aytTarih1: exam.subjects?.ayt_tarih1?.net || 0,
       aytCografya1: exam.subjects?.ayt_cografya1?.net || 0,
     };
-    // Tamamlayıcı olarak öğrencinin mevcut TYT net ortalamasını kullan
-    activeTyt = {
-      tytTurkce: allNets.tyt.tytTurkce || 28.0,
-      tytMatematik: allNets.tyt.tytMatematik || 22.0,
-      tytSosyal: allNets.tyt.tytSosyal || 13.0,
-      tytFen: allNets.tyt.tytFen || 6.0,
-    };
+    // Tamamlayıcı TYT
+    if (customPairedNets) {
+      activeTyt = {
+        tytTurkce: customPairedNets.tytTurkce ?? (customPairedNets.tyt_turkce?.net || 0),
+        tytMatematik: customPairedNets.tytMatematik ?? (customPairedNets.tyt_matematik?.net || 0),
+        tytSosyal: customPairedNets.tytSosyal ?? (customPairedNets.tyt_sosyal?.net || 0),
+        tytFen: customPairedNets.tytFen ?? (customPairedNets.tyt_fen?.net || 0),
+      };
+    } else {
+      activeTyt = {
+        tytTurkce: allNets.tyt.tytTurkce || 28.0,
+        tytMatematik: allNets.tyt.tytMatematik || 22.0,
+        tytSosyal: allNets.tyt.tytSosyal || 13.0,
+        tytFen: allNets.tyt.tytFen || 6.0,
+      };
+      if (!pairedLabel) pairedLabel = `Mevcut TYT Ortalaması (${(activeTyt.tytTurkce + activeTyt.tytMatematik + activeTyt.tytSosyal + activeTyt.tytFen).toFixed(1)} Net)`;
+    }
   }
 
-  // TYT Skoru
+  // TYT Skoru ve Sıralaması
   const tytResult = calculateTytScore(activeTyt, obpInfo.contribution);
-  // YKS EA Skoru
+  const tytRanking = estimateTytRanking(tytResult.placementScore);
+
+  // YKS EA Skoru ve Sıralaması
   const eaResult = calculateEaScore(activeTyt, activeAyt, obpInfo.contribution);
-  // Sıralama
   const ranking = estimateEaRanking(eaResult.placementScore);
 
   return {
@@ -244,12 +310,20 @@ export function calculateIndividualExamScore(exam, allExams = [], diplomaGrade =
     examTitle: exam.title,
     examDate: exam.date,
     stage: exam.stage,
+    isTyt,
+    isAyt,
     totalNet: exam.totalNet,
     obpInfo,
-    tytResult,
+    activeTyt,
+    activeAyt,
+    tytResult: {
+      ...tytResult,
+      ranking: tytRanking
+    },
     eaResult,
     ranking,
-    pairedStage: isTyt ? 'AYT Ortalaması ile Birlikte' : 'TYT Ortalaması ile Birlikte'
+    pairedLabel,
+    pairedStage: isTyt ? 'AYT (%60 Katkı) ile Birlikte' : 'TYT (%40 Katkı) ile Birlikte'
   };
 }
 
