@@ -1,13 +1,14 @@
 import React from 'react';
-import { LayoutDashboard, LineChart, PlusCircle, Compass, Settings } from 'lucide-react';
+import { LayoutDashboard, LineChart, PlusCircle, Compass, Settings, Calculator } from 'lucide-react';
 
 export default function BottomNav({ activeTab, setActiveTab, onOpenAddModal }) {
   const navItems = [
     { id: 'dashboard', label: 'Genel Bakış', icon: LayoutDashboard },
-    { id: 'analysis', label: 'Ders Analizi', icon: LineChart },
-    { id: 'add', label: 'Deneme Gir', icon: PlusCircle, isSpecial: true },
+    { id: 'analysis', label: 'Ders Analiz', icon: LineChart },
+    { id: 'calculator', label: 'YKS Puanı', icon: Calculator },
+    { id: 'add', label: 'Ekle', icon: PlusCircle, isSpecial: true },
     { id: 'yokatlas', label: 'YÖK Atlas', icon: Compass },
-    { id: 'settings', label: 'Bulut & Ayar', icon: Settings },
+    { id: 'settings', label: 'Ayarlar', icon: Settings },
   ];
 
   return (

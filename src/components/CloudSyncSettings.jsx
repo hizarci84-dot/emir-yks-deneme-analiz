@@ -361,6 +361,31 @@ export default function CloudSyncSettings({
                 className="w-full px-3 py-2 rounded-xl bg-slate-50 border border-slate-300 text-xs sm:text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-500"
               />
             </div>
+
+            <div>
+              <label className="block text-xs font-bold text-slate-700 mb-1">100'lük Diploma Notu (OBP)</label>
+              <input
+                type="number"
+                min="50"
+                max="100"
+                step="0.1"
+                value={formData.diplomaGrade || 88.5}
+                onChange={(e) => setFormData({ ...formData, diplomaGrade: parseFloat(e.target.value) })}
+                className="w-full px-3 py-2 rounded-xl bg-slate-50 border border-slate-300 text-xs sm:text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              />
+            </div>
+          </div>
+
+          <div className="mb-4">
+            <label className="flex items-center gap-2 cursor-pointer text-xs font-bold text-slate-700">
+              <input
+                type="checkbox"
+                checked={formData.isObpBroken || false}
+                onChange={(e) => setFormData({ ...formData, isObpBroken: e.target.checked })}
+                className="rounded text-indigo-600 focus:ring-indigo-500"
+              />
+              <span>Kırık OBP (Önceki yıl üniversiteye yerleşti, katsayı 0.06)</span>
+            </label>
           </div>
 
           <button

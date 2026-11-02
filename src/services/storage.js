@@ -180,6 +180,8 @@ export const StorageService = {
         grade: '11. Sınıf',
         track: 'Eşit Ağırlık (EA)',
         targetYear: 2028,
+        diplomaGrade: 88.5,
+        isObpBroken: false,
         cloudSyncCode: 'EMIR-YKS-2028',
         firebaseConfig: null,
         lastCloudSync: null
@@ -190,6 +192,8 @@ export const StorageService = {
         grade: '11. Sınıf',
         track: 'Eşit Ağırlık (EA)',
         targetYear: 2028,
+        diplomaGrade: 88.5,
+        isObpBroken: false,
         cloudSyncCode: 'EMIR-YKS-2028'
       };
     }

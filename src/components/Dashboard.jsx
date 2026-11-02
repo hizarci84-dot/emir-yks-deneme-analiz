@@ -1,10 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { 
   TrendingUp, Award, Target, BookOpen, Clock, Calendar, 
   ChevronRight, Sparkles, AlertCircle, Share2, Edit2, Trash2, 
-  CheckCircle, ArrowUpRight, ArrowDownRight, Layers, HelpCircle
+  CheckCircle, ArrowUpRight, ArrowDownRight, Layers, HelpCircle,
+  Calculator, GraduationCap
 } from 'lucide-react';
 import { StorageService } from '../services/storage';
+import { 
+  calculateObp, 
+  calculateEaScore, 
+  estimateEaRanking, 
+  extractNetsFromExams 
+} from '../services/yksScoreCalculator';
 
 export default function Dashboard({ 
   exams, 
@@ -18,6 +25,24 @@ export default function Dashboard({
   const [filterStage, setFilterStage] = useState('ALL'); // 'ALL', 'TYT', 'AYT'
   const [chartView, setChartView] = useState('ALL'); // 'ALL', 'TYT', 'AYT'
   const [activeChartExam, setActiveChartExam] = useState(null);
+
+  // Öğrenci Ayarları (Diploma Notu)
+  const settings = StorageService.getSettings();
+  const obpInfo = useMemo(() => {
+    return calculateObp(settings.diplomaGrade || 88.5, settings.isObpBroken || false);
+  }, [settings.diplomaGrade, settings.isObpBroken]);
+
+  // Deneme Ortalamalarından YKS EA Puanı ve Sıralama Tahmini
+  const calculatedYksStats = useMemo(() => {
+    const extracted = extractNetsFromExams(exams, 'AVERAGE');
+    const eaResult = calculateEaScore(extracted.tyt, extracted.ayt, obpInfo.contribution);
+    const ranking = estimateEaRanking(eaResult.placementScore);
+    return {
+      eaResult,
+      ranking,
+      extracted
+    };
+  }, [exams, obpInfo]);
 
   // Filtrelenmiş denemeler
   const filteredExams = exams.filter(e => {
@@ -99,7 +124,62 @@ export default function Dashboard({
         </div>
       </div>
 
-      {/* 2. Hızlı Metrik Kartları (Grid) */}
+      {/* 2. CANLI YKS PUANI, TAHMİNİ SIRALAMA & DİPLOMA NOTU KARTI */}
+      <div 
+        onClick={() => onNavigateToTab('calculator')}
+        className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 border border-indigo-900/60 p-5 sm:p-6 text-white shadow-lg cursor-pointer hover:border-indigo-500/50 transition group"
+      >
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <div className="w-12 h-12 rounded-2xl bg-indigo-600/40 text-amber-300 border border-indigo-400/30 flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition">
+              <Calculator className="w-6 h-6" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-bold text-indigo-300 uppercase tracking-wider">
+                  ÖSYM YKS Eşit Ağırlık Puanı & Sıralama
+                </span>
+                <span className="text-[10px] font-black px-2 py-0.5 rounded-full bg-amber-400/20 text-amber-300 border border-amber-300/30">
+                  {calculatedYksStats.ranking.percentile}
+                </span>
+              </div>
+              <div className="flex items-baseline gap-2 mt-0.5">
+                <span className="text-2xl sm:text-3xl font-black text-white">
+                  {calculatedYksStats.eaResult.placementScore.toFixed(3)}
+                </span>
+                <span className="text-xs text-indigo-300 font-bold">
+                  Yerleştirme Puanı (Y-EA)
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-4 sm:gap-6 self-start sm:self-auto pt-3 sm:pt-0 border-t sm:border-t-0 border-white/10 w-full sm:w-auto justify-between sm:justify-end">
+            <div className="text-left sm:text-right">
+              <span className="text-[10px] font-bold text-amber-300 uppercase block">Tahmini EA Sıralaması</span>
+              <span className="text-base sm:text-lg font-black text-amber-400 block">
+                {calculatedYksStats.ranking.rankString}
+              </span>
+              <span className="text-[10px] text-slate-400 block">
+                Diploma: {obpInfo.diplomaGrade} (+{obpInfo.contribution} OBP)
+              </span>
+            </div>
+
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onNavigateToTab('calculator');
+              }}
+              className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-indigo-600 group-hover:bg-indigo-500 text-white font-extrabold text-xs shadow-md transition"
+            >
+              <span>Hesapla</span>
+              <ChevronRight className="w-3.5 h-3.5" />
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* 3. Hızlı Metrik Kartları (Grid) */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5">
         
         {/* Kart 1: 1. Aşama (TYT) Son Net */}

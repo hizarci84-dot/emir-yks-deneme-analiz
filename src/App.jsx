@@ -5,6 +5,7 @@ import Dashboard from './components/Dashboard';
 import SubjectAnalysis from './components/SubjectAnalysis';
 import YokAtlasTracker from './components/YokAtlasTracker';
 import CloudSyncSettings from './components/CloudSyncSettings';
+import YksScoreCalculator from './components/YksScoreCalculator';
 import ExamEntryModal from './components/ExamEntryModal';
 import { StorageService } from './services/storage';
 import { YOK_ATLAS_PROGRAMS } from './data/yokAtlasData';
@@ -156,6 +157,16 @@ export default function App() {
               Ders Bazlı Analiz (Maarif)
             </button>
             <button
+              onClick={() => setActiveTab('calculator')}
+              className={`py-4 px-1 border-b-2 font-bold text-sm transition-all ${
+                activeTab === 'calculator'
+                  ? 'border-indigo-600 text-indigo-600'
+                  : 'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300'
+              }`}
+            >
+              YKS Puanı & Sıralama Simülatörü
+            </button>
+            <button
               onClick={() => setActiveTab('yokatlas')}
               className={`py-4 px-1 border-b-2 font-bold text-sm transition-all ${
                 activeTab === 'yokatlas'
@@ -197,6 +208,16 @@ export default function App() {
 
         {activeTab === 'analysis' && (
           <SubjectAnalysis exams={exams} />
+        )}
+
+        {activeTab === 'calculator' && (
+          <YksScoreCalculator
+            exams={exams}
+            settings={settings}
+            onUpdateSettings={setSettings}
+            onSelectTarget={handleSelectTarget}
+            onNavigateToTab={(tab) => setActiveTab(tab)}
+          />
         )}
 
         {activeTab === 'yokatlas' && (
