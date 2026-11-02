@@ -13,7 +13,7 @@ import { Smartphone, Download, X } from 'lucide-react';
 export default function App() {
   const [activeTab, setActiveTab] = useState('dashboard');
   const [exams, setExams] = useState([]);
-  const [targetProgramId, setTargetProgramId] = useState('boun-ybs');
+  const [targetProgramId, setTargetProgramId] = useState('yok_102270154');
   const [settings, setSettings] = useState(null);
   
   // Modal State

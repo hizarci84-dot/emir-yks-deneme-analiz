@@ -156,9 +156,9 @@ export const StorageService = {
   getTargetProgram: () => {
     try {
       const data = localStorage.getItem(STORAGE_KEY_TARGET);
-      return data ? JSON.parse(data) : 'boun-ybs'; // Varsayılan: Boğaziçi YBS
+      return data ? JSON.parse(data) : 'yok_102270154'; // Varsayılan: Boğaziçi YBS
     } catch {
-      return 'boun-ybs';
+      return 'yok_102270154';
     }
   },
 
