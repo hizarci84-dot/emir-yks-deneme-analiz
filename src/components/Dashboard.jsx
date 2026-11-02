@@ -3,15 +3,17 @@ import {
   TrendingUp, Award, Target, BookOpen, Clock, Calendar, 
   ChevronRight, Sparkles, AlertCircle, Share2, Edit2, Trash2, 
   CheckCircle, ArrowUpRight, ArrowDownRight, Layers, HelpCircle,
-  Calculator, GraduationCap
+  Calculator, GraduationCap, X, ExternalLink
 } from 'lucide-react';
 import { StorageService } from '../services/storage';
 import { 
   calculateObp, 
   calculateEaScore, 
   estimateEaRanking, 
-  extractNetsFromExams 
+  extractNetsFromExams,
+  calculateIndividualExamScore 
 } from '../services/yksScoreCalculator';
+import { YOK_ATLAS_PROGRAMS } from '../data/yokAtlasData';
 
 export default function Dashboard({ 
   exams, 
@@ -25,6 +27,7 @@ export default function Dashboard({
   const [filterStage, setFilterStage] = useState('ALL'); // 'ALL', 'TYT', 'AYT'
   const [chartView, setChartView] = useState('ALL'); // 'ALL', 'TYT', 'AYT'
   const [activeChartExam, setActiveChartExam] = useState(null);
+  const [examReportModal, setExamReportModal] = useState(null);
 
   // Öğrenci Ayarları (Diploma Notu)
   const settings = StorageService.getSettings();
@@ -43,6 +46,33 @@ export default function Dashboard({
       extracted
     };
   }, [exams, obpInfo]);
+
+  // İncelenen sınavın girebileceği bölümleri hesapla
+  const examReportData = useMemo(() => {
+    if (!examReportModal) return null;
+    const perf = calculateIndividualExamScore(examReportModal, exams, settings.diplomaGrade, settings.isObpBroken);
+    const userRank = perf.ranking.midRank;
+
+    const matched = YOK_ATLAS_PROGRAMS.map(prog => {
+      let status = 'HEDEF';
+      if (userRank <= prog.rank * 0.9) status = 'GARANTI';
+      else if (userRank <= prog.rank * 1.25) status = 'HEDEF';
+      else status = 'GAYRET';
+
+      return {
+        ...prog,
+        status,
+        rankDiff: userRank - prog.rank
+      };
+    }).sort((a, b) => a.rank - b.rank);
+
+    return {
+      perf,
+      targets: matched.filter(p => p.status === 'HEDEF').slice(0, 6),
+      guaranteed: matched.filter(p => p.status === 'GARANTI').slice(0, 4),
+      reach: matched.filter(p => p.status === 'GAYRET').slice(0, 3)
+    };
+  }, [examReportModal, exams, settings.diplomaGrade, settings.isObpBroken]);
 
   // Filtrelenmiş denemeler
   const filteredExams = exams.filter(e => {
@@ -717,6 +747,16 @@ export default function Dashboard({
                           }`}>
                             {exam.difficulty}
                           </span>
+                          
+                          {/* Sınav Puanı ve Sıralama Rozeti */}
+                          {(() => {
+                            const perf = calculateIndividualExamScore(exam, exams, settings.diplomaGrade, settings.isObpBroken);
+                            return (
+                              <span className="text-[10px] font-black px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200">
+                                🎯 {perf.eaResult.placementScore.toFixed(1)} Puan • {perf.ranking.rankString}
+                              </span>
+                            );
+                          })()}
                         </div>
 
                         <div className="flex items-center gap-3 text-xs text-slate-500 mt-1 font-medium">
@@ -731,7 +771,7 @@ export default function Dashboard({
                       </div>
                     </div>
 
-                    {/* Sağ Taraf: Net Rozeti ve Aksiyonlar */}
+                    {/* Sağ Taraf: Net Rozeti, Bölüm Butonu ve Aksiyonlar */}
                     <div className="flex items-center justify-between sm:justify-end gap-3 pt-2 sm:pt-0 border-t sm:border-t-0 border-slate-100">
                       <div className="text-right">
                         <span className="text-lg sm:text-xl font-black text-indigo-700 block leading-tight">
@@ -741,6 +781,19 @@ export default function Dashboard({
                           %{exam.successPercentage?.toFixed(1) || 0} Başarı
                         </span>
                       </div>
+
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setExamReportModal(exam);
+                        }}
+                        className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold text-xs shadow-md shadow-indigo-200 transition active:scale-95"
+                        title="Bu Sınavla Girebileceği Üniversite Bölümlerini Gör"
+                      >
+                        <GraduationCap className="w-4 h-4 text-amber-300" />
+                        <span className="hidden sm:inline">Kazanabileceği Bölümler</span>
+                        <span className="sm:hidden">Bölümler</span>
+                      </button>
 
                       <div className="flex items-center gap-1">
                         <button
@@ -829,6 +882,184 @@ export default function Dashboard({
         )}
 
       </div>
+
+      {/* 5. SEÇİLEN SINAVIN YKS KARNESİ & GİREBİLECEĞİ BÖLÜMLER MODALI */}
+      {examReportModal && examReportData && (
+        <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-3 sm:p-5 animate-in fade-in duration-200">
+          <div className="bg-white rounded-3xl shadow-2xl w-full max-w-3xl overflow-hidden border border-slate-200 animate-in zoom-in-95 duration-150">
+            
+            {/* Modal Üst Başlığı */}
+            <div className="p-5 sm:p-6 bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white flex items-start justify-between">
+              <div>
+                <div className="flex items-center gap-2 mb-1">
+                  <span className={`text-[10px] font-black px-2.5 py-0.5 rounded-full ${examReportModal.stage === 'TYT' ? 'bg-indigo-600' : 'bg-purple-600'}`}>
+                    {examReportModal.stage === 'TYT' ? '1. Aşama (TYT)' : '2. Aşama (AYT)'}
+                  </span>
+                  <span className="text-xs text-slate-300 font-medium">📅 {examReportModal.date}</span>
+                </div>
+                <h3 className="text-base sm:text-xl font-black">
+                  {examReportModal.title}
+                </h3>
+                <p className="text-xs text-indigo-200 font-medium mt-0.5">
+                  Özel Sınav Karnesi & Bu Deneme Performansıyla Kazanabileceğin Bölümler
+                </p>
+              </div>
+
+              <button
+                onClick={() => setExamReportModal(null)}
+                className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            {/* Modal Gövdesi */}
+            <div className="p-5 sm:p-6 space-y-6 max-h-[75vh] overflow-y-auto">
+              
+              {/* Puan ve Sıralama Gösterge Kutusu */}
+              <div className="bg-gradient-to-br from-indigo-50 to-purple-50 p-4 sm:p-5 rounded-2xl border border-indigo-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                  <span className="text-[11px] font-bold text-indigo-700 uppercase tracking-wider block">
+                    Bu Sınav Doğrultusunda Hesaplanan YKS Puanı
+                  </span>
+                  <div className="flex items-baseline gap-2 mt-0.5">
+                    <span className="text-3xl sm:text-4xl font-black text-slate-900">
+                      {examReportData.perf.eaResult.placementScore.toFixed(3)}
+                    </span>
+                    <span className="text-xs text-slate-500 font-bold">
+                      Y-EA (Yerleştirme Puanı)
+                    </span>
+                  </div>
+                  <span className="text-[11px] text-slate-500 mt-0.5 block">
+                    Ham Puan: <b>{examReportData.perf.eaResult.rawScore.toFixed(2)}</b> • OBP Katkısı: <b className="text-indigo-700">+{obpInfo.contribution}</b>
+                  </span>
+                </div>
+
+                <div className="bg-white p-3.5 rounded-xl border border-indigo-200 text-center sm:text-right shadow-sm">
+                  <span className="text-[10px] font-bold text-amber-700 uppercase block">Tahmini Türkiye Sıralaması</span>
+                  <span className="text-xl sm:text-2xl font-black text-amber-600 block">
+                    {examReportData.perf.ranking.rankString}
+                  </span>
+                  <span className="text-[10px] font-bold text-slate-500">
+                    {examReportData.perf.ranking.percentile}
+                  </span>
+                </div>
+              </div>
+
+              {/* Sınav Net Dökümü */}
+              <div>
+                <h4 className="text-xs font-black uppercase tracking-wider text-slate-700 mb-2">
+                  Ders Bazlı Net Sonuçları (Toplam: {examReportModal.totalNet.toFixed(2)} Net)
+                </h4>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                  {Object.entries(examReportModal.subjects || {}).map(([key, sub]) => {
+                    const cleanName = key.replace('tyt_', '').replace('ayt_', '').toUpperCase();
+                    return (
+                      <div key={key} className="bg-slate-50 p-2.5 rounded-xl border border-slate-200 text-center">
+                        <span className="text-[11px] font-extrabold text-slate-800 block truncate">{cleanName}</span>
+                        <span className="text-sm font-black text-indigo-600 block mt-0.5">{sub.net.toFixed(2)} Net</span>
+                        <span className="text-[10px] text-slate-400 font-semibold">{sub.correct}D {sub.wrong}Y {sub.blank}B</span>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Girebileceği Üniversite Bölümleri (YÖK Atlas) */}
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <h4 className="text-xs font-black uppercase tracking-wider text-slate-900 flex items-center gap-1.5">
+                    <GraduationCap className="w-4 h-4 text-indigo-600" />
+                    Bu Sınav Performansıyla Girebileceğin YÖK Atlas Programları
+                  </h4>
+                  <span className="text-[11px] text-slate-500 font-semibold">
+                    Tahmini #{examReportData.perf.ranking.midRank.toLocaleString()} Sıralama Baz Alındı
+                  </span>
+                </div>
+
+                {/* Hedefteki Bölümler */}
+                <div className="space-y-2">
+                  {examReportData.targets.map(prog => (
+                    <div key={prog.id} className="p-3 rounded-2xl bg-indigo-50/60 border border-indigo-200/80 flex items-center justify-between gap-3">
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <span className="text-xs font-black text-slate-900">{prog.university}</span>
+                          <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-800">
+                            ÖSYM Kodu: {prog.kilavuzKodu}
+                          </span>
+                        </div>
+                        <span className="text-xs text-indigo-900 font-semibold block">{prog.department}</span>
+                        <span className="text-[10px] text-slate-500">
+                          2024 Sıralama: #{prog.rank.toLocaleString()} • Taban Puan: {prog.baseScore}
+                        </span>
+                      </div>
+
+                      <button
+                        onClick={() => {
+                          setExamReportModal(null);
+                          onNavigateToTab('yokatlas');
+                        }}
+                        className="px-3 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs shadow-sm flex-shrink-0"
+                      >
+                        YÖK Atlas'ta Gör
+                      </button>
+                    </div>
+                  ))}
+
+                  {/* Rahat Kazanabileceği Güvenli Bölümler */}
+                  {examReportData.guaranteed.map(prog => (
+                    <div key={prog.id} className="p-3 rounded-2xl bg-emerald-50/50 border border-emerald-200/80 flex items-center justify-between gap-3">
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <span className="text-xs font-black text-slate-900">{prog.university}</span>
+                          <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800">
+                            Garanti Bandında
+                          </span>
+                        </div>
+                        <span className="text-xs text-emerald-900 font-semibold block">{prog.department}</span>
+                        <span className="text-[10px] text-slate-500">
+                          2024 Sıralama: #{prog.rank.toLocaleString()} • Taban: {prog.baseScore}
+                        </span>
+                      </div>
+
+                      <button
+                        onClick={() => {
+                          setExamReportModal(null);
+                          onNavigateToTab('yokatlas');
+                        }}
+                        className="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-sm flex-shrink-0"
+                      >
+                        İncele
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Koç Notu */}
+              <div className="p-4 rounded-2xl bg-amber-50 border border-amber-200 text-xs text-amber-900 flex items-start gap-3">
+                <Sparkles className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
+                <div>
+                  <span className="font-extrabold block">Rehberlik Değerlendirmesi:</span>
+                  Bu sınavda elde ettiğin <b>{examReportModal.totalNet.toFixed(1)} net</b>, OBP katkın ile birlikte seni Türkiye genelinde <b>{examReportData.perf.ranking.rankString}</b> bandına yerleştirmektedir. YÖK Atlas resmi verilerine göre yukarıdaki seçkin devlet ve vakıf lisans programlarına yerleşebilmektesin.
+                </div>
+              </div>
+
+            </div>
+
+            {/* Modal Alt Kapatma Barı */}
+            <div className="p-4 bg-slate-50 border-t border-slate-200 flex items-center justify-end gap-2">
+              <button
+                onClick={() => setExamReportModal(null)}
+                className="px-5 py-2.5 rounded-xl bg-slate-900 text-white font-bold text-xs shadow-sm hover:bg-slate-800 transition"
+              >
+                Kapat
+              </button>
+            </div>
+
+          </div>
+        </div>
+      )}
 
     </div>
   );

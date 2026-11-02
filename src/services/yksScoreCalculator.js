@@ -181,6 +181,79 @@ export function estimateEaRanking(placementScore) {
 }
 
 /**
+ * Tek bir deneme sınavının sonuçlarına göre YKS Puanı, Sıralama ve Bölüm Eşleştirmesi Hesaplar
+ * @param {object} exam - İncelenen tekil deneme nesnesi
+ * @param {array} allExams - Tüm denemeler listesi (tamamlayıcı aşama netlerini bulmak için)
+ * @param {number} diplomaGrade - 100 üzerinden diploma notu
+ * @param {boolean} isBrokenObp - Kırık OBP durumu
+ */
+export function calculateIndividualExamScore(exam, allExams = [], diplomaGrade = 88.5, isBrokenObp = false) {
+  if (!exam) return null;
+
+  const obpInfo = calculateObp(diplomaGrade, isBrokenObp);
+  const isTyt = exam.stage === 'TYT';
+  const isAyt = exam.stage === 'AYT';
+
+  // Tüm denemelerdeki ortalama tamamlayıcı netler
+  const allNets = extractNetsFromExams(allExams, 'AVERAGE');
+
+  let activeTyt = {};
+  let activeAyt = {};
+
+  if (isTyt) {
+    // İncelenen sınavın TYT netleri
+    activeTyt = {
+      tytTurkce: exam.subjects?.tyt_turkce?.net || 0,
+      tytMatematik: exam.subjects?.tyt_matematik?.net || 0,
+      tytSosyal: exam.subjects?.tyt_sosyal?.net || 0,
+      tytFen: exam.subjects?.tyt_fen?.net || 0,
+    };
+    // Tamamlayıcı olarak öğrencinin mevcut AYT net ortalamasını kullan
+    activeAyt = {
+      aytMatematik: allNets.ayt.aytMatematik || 20.0,
+      aytEdebiyat: allNets.ayt.aytEdebiyat || 17.0,
+      aytTarih1: allNets.ayt.aytTarih1 || 6.5,
+      aytCografya1: allNets.ayt.aytCografya1 || 3.5,
+    };
+  } else if (isAyt) {
+    // İncelenen sınavın AYT netleri
+    activeAyt = {
+      aytMatematik: exam.subjects?.ayt_matematik?.net || 0,
+      aytEdebiyat: exam.subjects?.ayt_edebiyat?.net || 0,
+      aytTarih1: exam.subjects?.ayt_tarih1?.net || 0,
+      aytCografya1: exam.subjects?.ayt_cografya1?.net || 0,
+    };
+    // Tamamlayıcı olarak öğrencinin mevcut TYT net ortalamasını kullan
+    activeTyt = {
+      tytTurkce: allNets.tyt.tytTurkce || 28.0,
+      tytMatematik: allNets.tyt.tytMatematik || 22.0,
+      tytSosyal: allNets.tyt.tytSosyal || 13.0,
+      tytFen: allNets.tyt.tytFen || 6.0,
+    };
+  }
+
+  // TYT Skoru
+  const tytResult = calculateTytScore(activeTyt, obpInfo.contribution);
+  // YKS EA Skoru
+  const eaResult = calculateEaScore(activeTyt, activeAyt, obpInfo.contribution);
+  // Sıralama
+  const ranking = estimateEaRanking(eaResult.placementScore);
+
+  return {
+    examId: exam.id,
+    examTitle: exam.title,
+    examDate: exam.date,
+    stage: exam.stage,
+    totalNet: exam.totalNet,
+    obpInfo,
+    tytResult,
+    eaResult,
+    ranking,
+    pairedStage: isTyt ? 'AYT Ortalaması ile Birlikte' : 'TYT Ortalaması ile Birlikte'
+  };
+}
+
+/**
  * Deneme listesinden ortalama veya son deneme netlerini çıkartır
  */
 export function extractNetsFromExams(exams = [], mode = 'AVERAGE') {

@@ -362,6 +362,49 @@ export default function YksScoreCalculator({
           </div>
         </div>
 
+        {/* Tek Bir Deneme Seçme Kutusu */}
+        {exams.length > 0 && (
+          <div className="mb-5 p-3.5 bg-slate-50 border border-slate-200 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+            <div className="flex items-center gap-2">
+              <span className="font-extrabold text-slate-800">🎯 Belirli Bir Denemeyi Yükle:</span>
+              <span className="text-slate-500 hidden sm:inline">İncelemek istediğin denemeyi seç, netleri ve girebileceğin bölümleri anında gör.</span>
+            </div>
+            <select
+              onChange={(e) => {
+                const selectedId = e.target.value;
+                if (!selectedId) return;
+                const exam = exams.find(x => x.id === selectedId);
+                if (exam) {
+                  setDataSourceMode('CUSTOM');
+                  if (exam.stage === 'TYT') {
+                    setCustomTyt({
+                      tytTurkce: exam.subjects?.tyt_turkce?.net || 0,
+                      tytMatematik: exam.subjects?.tyt_matematik?.net || 0,
+                      tytSosyal: exam.subjects?.tyt_sosyal?.net || 0,
+                      tytFen: exam.subjects?.tyt_fen?.net || 0
+                    });
+                  } else if (exam.stage === 'AYT') {
+                    setCustomAyt({
+                      aytMatematik: exam.subjects?.ayt_matematik?.net || 0,
+                      aytEdebiyat: exam.subjects?.ayt_edebiyat?.net || 0,
+                      aytTarih1: exam.subjects?.ayt_tarih1?.net || 0,
+                      aytCografya1: exam.subjects?.ayt_cografya1?.net || 0
+                    });
+                  }
+                }
+              }}
+              className="px-3.5 py-2 rounded-xl bg-white border border-slate-300 font-bold text-slate-800 text-xs focus:ring-2 focus:ring-indigo-500"
+            >
+              <option value="">-- Kayıtlı Bir Denemeyi Seçin --</option>
+              {exams.map(e => (
+                <option key={e.id} value={e.id}>
+                  {e.title} ({e.stage} - {e.totalNet.toFixed(1)} Net • {e.date})
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
+
         {/* 2 Kolonlu Net Kontrolleri: Sol TYT, Sağ AYT EA */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           
