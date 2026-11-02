@@ -21,7 +21,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 94,
     "baseScore": 533.53,
     "baseScore1": 527.4,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=203910275",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=203910275",
     "nets": {
       "tytTurkce": 35,
       "tytMatematik": 28.5,
@@ -54,7 +54,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 473,
     "baseScore": 529.3,
     "baseScore1": 510.78,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=203910796",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=203910796",
     "nets": {
       "tytTurkce": 36.25,
       "tytMatematik": 29.25,
@@ -87,7 +87,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 277,
     "baseScore": 526.26,
     "baseScore1": 517.8,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=203910309",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=203910309",
     "nets": {
       "tytTurkce": 37,
       "tytMatematik": 27.25,
@@ -120,7 +120,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 651,
     "baseScore": 520.83,
     "baseScore1": 503.21,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=203910336",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=203910336",
     "nets": {
       "tytTurkce": 30,
       "tytMatematik": 24.75,
@@ -153,7 +153,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": null,
     "baseScore": 520.64,
     "baseScore1": 0,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=203101046",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=203101046",
     "nets": {
       "tytTurkce": 32,
       "tytMatematik": 28,
@@ -186,7 +186,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 256,
     "baseScore": 516.22,
     "baseScore1": 508.29,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=205110144",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=205110144",
     "nets": {
       "tytTurkce": 32.5,
       "tytMatematik": 39,
@@ -219,7 +219,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 425,
     "baseScore": 514.68,
     "baseScore1": 502.13,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=104010052",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=104010052",
     "nets": {
       "tytTurkce": 32.75,
       "tytMatematik": 31,
@@ -252,7 +252,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 305,
     "baseScore": 514.09,
     "baseScore1": 504.02,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=202111106",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=202111106",
     "nets": {
       "tytTurkce": 31.25,
       "tytMatematik": 25.75,
@@ -285,7 +285,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 630,
     "baseScore": 513.43,
     "baseScore1": 493.82,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=203910133",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=203910133",
     "nets": {
       "tytTurkce": 31,
       "tytMatematik": 31.5,
@@ -318,7 +318,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 311,
     "baseScore": 508.88,
     "baseScore1": 503.6,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=202110205",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=202110205",
     "nets": {
       "tytTurkce": 32.75,
       "tytMatematik": 36.5,
@@ -351,7 +351,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 403,
     "baseScore": 508.28,
     "baseScore1": 501.85,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=205110074",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=205110074",
     "nets": {
       "tytTurkce": 32.5,
       "tytMatematik": 30,
@@ -384,7 +384,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 691,
     "baseScore": 506.01,
     "baseScore1": 494.12,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=205410283",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=205410283",
     "nets": {
       "tytTurkce": 28.75,
       "tytMatematik": 22.75,
@@ -417,7 +417,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 670,
     "baseScore": 505.64,
     "baseScore1": 493.61,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=203910169",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=203910169",
     "nets": {
       "tytTurkce": 35,
       "tytMatematik": 24.5,
@@ -450,7 +450,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 515,
     "baseScore": 504.74,
     "baseScore1": 492.63,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=202110383",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=202110383",
     "nets": {
       "tytTurkce": 29.5,
       "tytMatematik": 31.75,
@@ -483,7 +483,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 609,
     "baseScore": 503.83,
     "baseScore1": 495.76,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=102210223",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=102210223",
     "nets": {
       "tytTurkce": 35,
       "tytMatematik": 34,
@@ -516,7 +516,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": null,
     "baseScore": 501.48,
     "baseScore1": 0,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=203101053",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=203101053",
     "nets": {
       "tytTurkce": 32,
       "tytMatematik": 28,
@@ -549,7 +549,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 529,
     "baseScore": 501.27,
     "baseScore1": 494.65,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=102210214",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=102210214",
     "nets": {
       "tytTurkce": 30,
       "tytMatematik": 27.25,
@@ -582,7 +582,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 972,
     "baseScore": 500.77,
     "baseScore1": 481.53,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=205410071",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=205410071",
     "nets": {
       "tytTurkce": 30,
       "tytMatematik": 30.75,
@@ -615,7 +615,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": null,
     "baseScore": 498.35,
     "baseScore1": 0,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=203100927",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=203100927",
     "nets": {
       "tytTurkce": 32,
       "tytMatematik": 28,
@@ -648,7 +648,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 975,
     "baseScore": 496.05,
     "baseScore1": 481.64,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=205410053",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=205410053",
     "nets": {
       "tytTurkce": 33.25,
       "tytMatematik": 24.5,
@@ -681,7 +681,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 845,
     "baseScore": 494.91,
     "baseScore1": 488.77,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=102270154",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=102270154",
     "nets": {
       "tytTurkce": 32.5,
       "tytMatematik": 33.25,
@@ -714,7 +714,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 1091,
     "baseScore": 493.91,
     "baseScore1": 478.66,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=204810228",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=204810228",
     "nets": {
       "tytTurkce": 37.5,
       "tytMatematik": 25.25,
@@ -747,7 +747,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 414,
     "baseScore": 492.48,
     "baseScore1": 497.61,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=202110241",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=202110241",
     "nets": {
       "tytTurkce": 36.25,
       "tytMatematik": 26.25,
@@ -780,7 +780,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": null,
     "baseScore": 490.25,
     "baseScore1": 0,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=203100962",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=203100962",
     "nets": {
       "tytTurkce": 32,
       "tytMatematik": 28,
@@ -813,7 +813,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 1169,
     "baseScore": 489.9,
     "baseScore1": 485.02,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=102270147",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=102270147",
     "nets": {
       "tytTurkce": 33.75,
       "tytMatematik": 35,
@@ -846,7 +846,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 1240,
     "baseScore": 489.35,
     "baseScore1": 474.76,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=102270035",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=102270035",
     "nets": {
       "tytTurkce": 33.75,
       "tytMatematik": 29,
@@ -879,7 +879,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 1447,
     "baseScore": 488.73,
     "baseScore1": 476.31,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=104010061",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=104010061",
     "nets": {
       "tytTurkce": 28.25,
       "tytMatematik": 24.25,
@@ -912,7 +912,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 683,
     "baseScore": 487.74,
     "baseScore1": 484.39,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=204810334",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=204810334",
     "nets": {
       "tytTurkce": 25,
       "tytMatematik": 30,
@@ -945,7 +945,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 1389,
     "baseScore": 487.62,
     "baseScore1": 475.83,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=104010079",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=104010079",
     "nets": {
       "tytTurkce": 31.25,
       "tytMatematik": 29,
@@ -978,7 +978,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 1608,
     "baseScore": 484.88,
     "baseScore1": 471.36,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=105511051",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=105511051",
     "nets": {
       "tytTurkce": 32.75,
       "tytMatematik": 23,
@@ -1011,7 +1011,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 1027,
     "baseScore": 483.7,
     "baseScore1": 469.9,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=205410389",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=205410389",
     "nets": {
       "tytTurkce": 33.75,
       "tytMatematik": 25.5,
@@ -1044,7 +1044,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 1520,
     "baseScore": 482.06,
     "baseScore1": 475.32,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=108410212",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=108410212",
     "nets": {
       "tytTurkce": 28,
       "tytMatematik": 23.5,
@@ -1077,7 +1077,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 1512,
     "baseScore": 481.71,
     "baseScore1": 474.43,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=108410203",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=108410203",
     "nets": {
       "tytTurkce": 31.25,
       "tytMatematik": 26.75,
@@ -1110,7 +1110,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 1362,
     "baseScore": 481.66,
     "baseScore1": 474.17,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=102210232",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=102210232",
     "nets": {
       "tytTurkce": 38.75,
       "tytMatematik": 32.5,
@@ -1143,7 +1143,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 1878,
     "baseScore": 481.64,
     "baseScore1": 461.62,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=105510326",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=105510326",
     "nets": {
       "tytTurkce": 31.25,
       "tytMatematik": 18.75,
@@ -1176,7 +1176,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 1619,
     "baseScore": 481.53,
     "baseScore1": 466.3,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=105690587",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=105690587",
     "nets": {
       "tytTurkce": 30,
       "tytMatematik": 17.75,
@@ -1209,7 +1209,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 756,
     "baseScore": 481.41,
     "baseScore1": 481.65,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=202110286",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=202110286",
     "nets": {
       "tytTurkce": 35.25,
       "tytMatematik": 33.5,
@@ -1242,7 +1242,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 1819,
     "baseScore": 481.24,
     "baseScore1": 468.98,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=104010097",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=104010097",
     "nets": {
       "tytTurkce": 24,
       "tytMatematik": 27.5,
@@ -1275,7 +1275,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 1671,
     "baseScore": 479.34,
     "baseScore1": 466.72,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=202110268",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=202110268",
     "nets": {
       "tytTurkce": 36.5,
       "tytMatematik": 19,
@@ -1308,7 +1308,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 768,
     "baseScore": 478.64,
     "baseScore1": 485.72,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=204810476",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=204810476",
     "nets": {
       "tytTurkce": 32.5,
       "tytMatematik": 22.75,
@@ -1341,7 +1341,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": null,
     "baseScore": 477.86,
     "baseScore1": 0,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=205400157",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=205400157",
     "nets": {
       "tytTurkce": 32,
       "tytMatematik": 28,
@@ -1374,7 +1374,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 1417,
     "baseScore": 477.72,
     "baseScore1": 470.22,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=204890046",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=204890046",
     "nets": {
       "tytTurkce": 33.75,
       "tytMatematik": 22.25,
@@ -1407,7 +1407,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 1142,
     "baseScore": 477.1,
     "baseScore1": 469.54,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=204811014",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=204811014",
     "nets": {
       "tytTurkce": 35,
       "tytMatematik": 31.5,
@@ -1440,7 +1440,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 1993,
     "baseScore": 476.36,
     "baseScore1": 464.73,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=205411112",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=205411112",
     "nets": {
       "tytTurkce": 33.25,
       "tytMatematik": 22.25,
@@ -1473,7 +1473,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 1779,
     "baseScore": 475.96,
     "baseScore1": 467.16,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=102270203",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=102270203",
     "nets": {
       "tytTurkce": 35,
       "tytMatematik": 26.75,
@@ -1506,7 +1506,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 879,
     "baseScore": 475.61,
     "baseScore1": 480.03,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=204810016",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=204810016",
     "nets": {
       "tytTurkce": 35,
       "tytMatematik": 27.5,
@@ -1539,7 +1539,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 3225,
     "baseScore": 475.14,
     "baseScore1": 461.84,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=101110518",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=101110518",
     "nets": {
       "tytTurkce": 34.25,
       "tytMatematik": 26.75,
@@ -1572,7 +1572,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 2083,
     "baseScore": 474.48,
     "baseScore1": 477.25,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=203910036",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=203910036",
     "nets": {
       "tytTurkce": 31.25,
       "tytMatematik": 32.75,
@@ -1605,7 +1605,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 1559,
     "baseScore": 473.9,
     "baseScore1": 464.28,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=206111969",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=206111969",
     "nets": {
       "tytTurkce": 32.5,
       "tytMatematik": 26.25,
@@ -1638,7 +1638,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 2149,
     "baseScore": 473.81,
     "baseScore1": 465.1,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=108410275",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=108410275",
     "nets": {
       "tytTurkce": 29.5,
       "tytMatematik": 20.5,
@@ -1671,7 +1671,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 1657,
     "baseScore": 473.51,
     "baseScore1": 463.99,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=204810731",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=204810731",
     "nets": {
       "tytTurkce": 34,
       "tytMatematik": 32.75,
@@ -1704,7 +1704,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 2450,
     "baseScore": 472.19,
     "baseScore1": 463.7,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=102270140",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=102270140",
     "nets": {
       "tytTurkce": 33,
       "tytMatematik": 24,
@@ -1737,7 +1737,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 2372,
     "baseScore": 472.03,
     "baseScore1": 459.92,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=104010088",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=104010088",
     "nets": {
       "tytTurkce": 28.25,
       "tytMatematik": 22.5,
@@ -1770,7 +1770,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 1191,
     "baseScore": 471.4,
     "baseScore1": 471.42,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=202111115",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=202111115",
     "nets": {
       "tytTurkce": 31.5,
       "tytMatematik": 21,
@@ -1803,7 +1803,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 1458,
     "baseScore": 471.36,
     "baseScore1": 460.72,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=204810273",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=204810273",
     "nets": {
       "tytTurkce": 32.5,
       "tytMatematik": 25.25,
@@ -1836,7 +1836,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 2223,
     "baseScore": 471,
     "baseScore1": 460.67,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=204811032",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=204811032",
     "nets": {
       "tytTurkce": 30.25,
       "tytMatematik": 28.75,
@@ -1869,7 +1869,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 2271,
     "baseScore": 470.69,
     "baseScore1": 457.95,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=205410989",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=205410989",
     "nets": {
       "tytTurkce": 32.5,
       "tytMatematik": 34.5,
@@ -1902,7 +1902,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 2155,
     "baseScore": 470.45,
     "baseScore1": 463.09,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=108410178",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=108410178",
     "nets": {
       "tytTurkce": 28.75,
       "tytMatematik": 18.75,
@@ -1935,7 +1935,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 2143,
     "baseScore": 469.42,
     "baseScore1": 461.94,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=206190547",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=206190547",
     "nets": {
       "tytTurkce": 34.25,
       "tytMatematik": 20.75,
@@ -1968,7 +1968,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 2706,
     "baseScore": 469.35,
     "baseScore1": 455.45,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=102270210",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=102270210",
     "nets": {
       "tytTurkce": 31.25,
       "tytMatematik": 18.25,
@@ -2001,7 +2001,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 1900,
     "baseScore": 467.45,
     "baseScore1": 464.24,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=206100437",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=206100437",
     "nets": {
       "tytTurkce": 32,
       "tytMatematik": 28,
@@ -2034,7 +2034,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": null,
     "baseScore": 465.85,
     "baseScore1": 454.98,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=104890610",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=104890610",
     "nets": {
       "tytTurkce": 36.25,
       "tytMatematik": 22.5,
@@ -2067,7 +2067,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 4436,
     "baseScore": 465.07,
     "baseScore1": 447.86,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=200511568",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=200511568",
     "nets": {
       "tytTurkce": 28.75,
       "tytMatematik": 23.75,
@@ -2100,7 +2100,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 2653,
     "baseScore": 464.63,
     "baseScore1": 457.16,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=206100486",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=206100486",
     "nets": {
       "tytTurkce": 32,
       "tytMatematik": 28,
@@ -2133,7 +2133,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 3447,
     "baseScore": 464.38,
     "baseScore1": 461.41,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=202190195",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=202190195",
     "nets": {
       "tytTurkce": 31.5,
       "tytMatematik": 25.25,
@@ -2166,7 +2166,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 5560,
     "baseScore": 464.28,
     "baseScore1": 451.25,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=105610501",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=105610501",
     "nets": {
       "tytTurkce": 35,
       "tytMatematik": 19.75,
@@ -2199,7 +2199,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 6753,
     "baseScore": 462.37,
     "baseScore1": 446.54,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=110110507",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=110110507",
     "nets": {
       "tytTurkce": 32.5,
       "tytMatematik": 21,
@@ -2232,7 +2232,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 1568,
     "baseScore": 461.2,
     "baseScore1": 463.22,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=108410239",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=108410239",
     "nets": {
       "tytTurkce": 30.25,
       "tytMatematik": 33.25,
@@ -2265,7 +2265,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 2793,
     "baseScore": 460.42,
     "baseScore1": 450.33,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=200510322",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=200510322",
     "nets": {
       "tytTurkce": 24.5,
       "tytMatematik": 33.25,
@@ -2298,7 +2298,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 3022,
     "baseScore": 460.24,
     "baseScore1": 456.9,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=108410266",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=108410266",
     "nets": {
       "tytTurkce": 31.5,
       "tytMatematik": 23.75,
@@ -2331,7 +2331,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 7943,
     "baseScore": 460.1,
     "baseScore1": 442.97,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=110190084",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=110190084",
     "nets": {
       "tytTurkce": 39,
       "tytMatematik": 23.5,
@@ -2364,7 +2364,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 4465,
     "baseScore": 457.58,
     "baseScore1": 441.51,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=206100325",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=206100325",
     "nets": {
       "tytTurkce": 32,
       "tytMatematik": 28,
@@ -2397,7 +2397,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 3356,
     "baseScore": 457.26,
     "baseScore1": 449.29,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=206100360",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=206100360",
     "nets": {
       "tytTurkce": 32,
       "tytMatematik": 28,
@@ -2430,7 +2430,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": null,
     "baseScore": 456.84,
     "baseScore1": 444.39,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=203910832",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=203910832",
     "nets": {
       "tytTurkce": 38.75,
       "tytMatematik": 26.75,
@@ -2463,7 +2463,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 3831,
     "baseScore": 456.17,
     "baseScore1": 449.21,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=109610022",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=109610022",
     "nets": {
       "tytTurkce": 27.5,
       "tytMatematik": 28.5,
@@ -2496,7 +2496,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 2349,
     "baseScore": 455.56,
     "baseScore1": 446.55,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=206100563",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=206100563",
     "nets": {
       "tytTurkce": 32,
       "tytMatematik": 28,
@@ -2529,7 +2529,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 9005,
     "baseScore": 455.18,
     "baseScore1": 441.65,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=107210332",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=107210332",
     "nets": {
       "tytTurkce": 26.25,
       "tytMatematik": 19,
@@ -2562,7 +2562,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": null,
     "baseScore": 454.71,
     "baseScore1": 429.63,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=203910318",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=203910318",
     "nets": {
       "tytTurkce": 31.25,
       "tytMatematik": 20.75,
@@ -2595,7 +2595,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 13632,
     "baseScore": 453.91,
     "baseScore1": 439.67,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=208610015",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=208610015",
     "nets": {
       "tytTurkce": 24.75,
       "tytMatematik": 23,
@@ -2628,7 +2628,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 9139,
     "baseScore": 453.34,
     "baseScore1": 440.87,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=111710412",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=111710412",
     "nets": {
       "tytTurkce": 26.25,
       "tytMatematik": 28,
@@ -2661,7 +2661,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 2028,
     "baseScore": 453.07,
     "baseScore1": 454.31,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=202190182",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=202190182",
     "nets": {
       "tytTurkce": 35,
       "tytMatematik": 28.25,
@@ -2694,7 +2694,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 3942,
     "baseScore": 453.01,
     "baseScore1": 445.99,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=107290348",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=107290348",
     "nets": {
       "tytTurkce": 30,
       "tytMatematik": 25.25,
@@ -2727,7 +2727,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 11391,
     "baseScore": 452.73,
     "baseScore1": 437.04,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=203710083",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=203710083",
     "nets": {
       "tytTurkce": 30,
       "tytMatematik": 19.5,
@@ -2760,7 +2760,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 4886,
     "baseScore": 451.56,
     "baseScore1": 437.68,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=200510349",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=200510349",
     "nets": {
       "tytTurkce": 22.75,
       "tytMatematik": 23.25,
@@ -2793,7 +2793,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 9947,
     "baseScore": 450.92,
     "baseScore1": 438.04,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=202510167",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=202510167",
     "nets": {
       "tytTurkce": 28.75,
       "tytMatematik": 23.25,
@@ -2826,7 +2826,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 5873,
     "baseScore": 449.76,
     "baseScore1": 441.03,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=102210092",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=102210092",
     "nets": {
       "tytTurkce": 35,
       "tytMatematik": 12,
@@ -2859,7 +2859,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 3094,
     "baseScore": 449.63,
     "baseScore1": 439.92,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=202910736",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=202910736",
     "nets": {
       "tytTurkce": 25.5,
       "tytMatematik": 21.75,
@@ -2892,7 +2892,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 5695,
     "baseScore": 449.13,
     "baseScore1": 441.11,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=104810141",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=104810141",
     "nets": {
       "tytTurkce": 33.75,
       "tytMatematik": 23.5,
@@ -2925,7 +2925,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 13391,
     "baseScore": 448.96,
     "baseScore1": 435.47,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=110010023",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=110010023",
     "nets": {
       "tytTurkce": 29.5,
       "tytMatematik": 19.75,
@@ -2958,7 +2958,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": null,
     "baseScore": 448.79,
     "baseScore1": 0,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=200500220",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=200500220",
     "nets": {
       "tytTurkce": 32,
       "tytMatematik": 28,
@@ -2991,7 +2991,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 11385,
     "baseScore": 448.18,
     "baseScore1": 434.74,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=109610013",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=109610013",
     "nets": {
       "tytTurkce": 26.75,
       "tytMatematik": 12.25,
@@ -3024,7 +3024,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 4639,
     "baseScore": 447.17,
     "baseScore1": 443.06,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=206100612",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=206100612",
     "nets": {
       "tytTurkce": 32,
       "tytMatematik": 28,
@@ -3057,7 +3057,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 5256,
     "baseScore": 447.08,
     "baseScore1": 445.67,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=104010043",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=104010043",
     "nets": {
       "tytTurkce": 28.75,
       "tytMatematik": 21.25,
@@ -3090,7 +3090,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 15884,
     "baseScore": 447.03,
     "baseScore1": 430.61,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=104810432",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=104810432",
     "nets": {
       "tytTurkce": 34.75,
       "tytMatematik": 16,
@@ -3123,7 +3123,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 12514,
     "baseScore": 446.89,
     "baseScore1": 431.83,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=207210331",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=207210331",
     "nets": {
       "tytTurkce": 33.75,
       "tytMatematik": 25,
@@ -3156,7 +3156,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 6023,
     "baseScore": 446.78,
     "baseScore1": 437.2,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=206100591",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=206100591",
     "nets": {
       "tytTurkce": 32,
       "tytMatematik": 28,
@@ -3189,7 +3189,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 15901,
     "baseScore": 446.72,
     "baseScore1": 433.4,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=110910096",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=110910096",
     "nets": {
       "tytTurkce": 31.25,
       "tytMatematik": 19.5,
@@ -3222,7 +3222,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 4334,
     "baseScore": 446.47,
     "baseScore1": 428.64,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=202110956",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=202110956",
     "nets": {
       "tytTurkce": 35.25,
       "tytMatematik": 16,
@@ -3255,7 +3255,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 8183,
     "baseScore": 446.44,
     "baseScore1": 437.15,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=200611328",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=200611328",
     "nets": {
       "tytTurkce": 31.5,
       "tytMatematik": 25.5,
@@ -3288,7 +3288,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 6835,
     "baseScore": 446.23,
     "baseScore1": 436.02,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=206100374",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=206100374",
     "nets": {
       "tytTurkce": 32,
       "tytMatematik": 28,
@@ -3321,7 +3321,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": null,
     "baseScore": 445.55,
     "baseScore1": 442.06,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=203910284",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=203910284",
     "nets": {
       "tytTurkce": 32.5,
       "tytMatematik": 25.25,
@@ -3354,7 +3354,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 6110,
     "baseScore": 445.52,
     "baseScore1": 436.37,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=109610173",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=109610173",
     "nets": {
       "tytTurkce": 35.25,
       "tytMatematik": 14.25,
@@ -3387,7 +3387,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 20025,
     "baseScore": 445.05,
     "baseScore1": 426.99,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=105410115",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=105410115",
     "nets": {
       "tytTurkce": 36.25,
       "tytMatematik": 18.75,
@@ -3420,7 +3420,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 17622,
     "baseScore": 444.98,
     "baseScore1": 427.25,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=209210059",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=209210059",
     "nets": {
       "tytTurkce": 26.25,
       "tytMatematik": 21.75,
@@ -3453,7 +3453,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 24350,
     "baseScore": 444.48,
     "baseScore1": 425.61,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=110110137",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=110110137",
     "nets": {
       "tytTurkce": 30,
       "tytMatematik": 23.5,
@@ -3486,7 +3486,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 16012,
     "baseScore": 444.28,
     "baseScore1": 426.64,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=203110211",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=203110211",
     "nets": {
       "tytTurkce": 28.75,
       "tytMatematik": 21.75,
@@ -3519,7 +3519,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 16194,
     "baseScore": 444.09,
     "baseScore1": 430.22,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=103110309",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=103110309",
     "nets": {
       "tytTurkce": 30.25,
       "tytMatematik": 18,
@@ -3552,7 +3552,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 20752,
     "baseScore": 443.84,
     "baseScore1": 426.24,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=104810414",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=104810414",
     "nets": {
       "tytTurkce": 31.25,
       "tytMatematik": 28.5,
@@ -3585,7 +3585,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 6168,
     "baseScore": 443.56,
     "baseScore1": 443.99,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=204890174",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=204890174",
     "nets": {
       "tytTurkce": 33.25,
       "tytMatematik": 23,
@@ -3618,7 +3618,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": null,
     "baseScore": 443.04,
     "baseScore1": 0,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=208610115",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=208610115",
     "nets": {
       "tytTurkce": 31,
       "tytMatematik": 25,
@@ -3651,7 +3651,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 7190,
     "baseScore": 443.04,
     "baseScore1": 436.01,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=105690802",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=105690802",
     "nets": {
       "tytTurkce": 29.25,
       "tytMatematik": 28.25,
@@ -3684,7 +3684,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 21543,
     "baseScore": 442.47,
     "baseScore1": 423.64,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=204111948",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=204111948",
     "nets": {
       "tytTurkce": 33.75,
       "tytMatematik": 17.25,
@@ -3717,7 +3717,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 9679,
     "baseScore": 442.28,
     "baseScore1": 433.16,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=206100465",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=206100465",
     "nets": {
       "tytTurkce": 31,
       "tytMatematik": 25,
@@ -3750,7 +3750,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 8245,
     "baseScore": 441.92,
     "baseScore1": 432.45,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=206710189",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=206710189",
     "nets": {
       "tytTurkce": 29.25,
       "tytMatematik": 28.75,
@@ -3783,7 +3783,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 5687,
     "baseScore": 441.38,
     "baseScore1": 432.56,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=200511056",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=200511056",
     "nets": {
       "tytTurkce": 30,
       "tytMatematik": 21.75,
@@ -3816,7 +3816,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 23889,
     "baseScore": 441.38,
     "baseScore1": 426.77,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=208610096",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=208610096",
     "nets": {
       "tytTurkce": 32.5,
       "tytMatematik": 28.75,
@@ -3849,7 +3849,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 18560,
     "baseScore": 441.34,
     "baseScore1": 426.37,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=203510791",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=203510791",
     "nets": {
       "tytTurkce": 32.75,
       "tytMatematik": 17,
@@ -3882,7 +3882,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 16615,
     "baseScore": 441.24,
     "baseScore1": 427.45,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=201110086",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=201110086",
     "nets": {
       "tytTurkce": 31.75,
       "tytMatematik": 20.5,
@@ -3915,7 +3915,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 19038,
     "baseScore": 440.73,
     "baseScore1": 425.96,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=101010255",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=101010255",
     "nets": {
       "tytTurkce": 30.5,
       "tytMatematik": 16.75,
@@ -3948,7 +3948,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 22221,
     "baseScore": 440.31,
     "baseScore1": 419.79,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=200210582",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=200210582",
     "nets": {
       "tytTurkce": 30.25,
       "tytMatematik": 24.75,
@@ -3981,7 +3981,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 9090,
     "baseScore": 440.28,
     "baseScore1": 429.82,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=203790204",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=203790204",
     "nets": {
       "tytTurkce": 31.5,
       "tytMatematik": 21.75,
@@ -4014,7 +4014,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 23695,
     "baseScore": 439.25,
     "baseScore1": 419.02,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=203410086",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=203410086",
     "nets": {
       "tytTurkce": 33.75,
       "tytMatematik": 26.25,
@@ -4047,7 +4047,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 21528,
     "baseScore": 439.15,
     "baseScore1": 423.63,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=100710145",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=100710145",
     "nets": {
       "tytTurkce": 32.75,
       "tytMatematik": 15,
@@ -4080,7 +4080,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 4159,
     "baseScore": 437.79,
     "baseScore1": 437.57,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=203510261",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=203510261",
     "nets": {
       "tytTurkce": 32,
       "tytMatematik": 21.75,
@@ -4113,7 +4113,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 13311,
     "baseScore": 437.23,
     "baseScore1": 428.53,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=107290347",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=107290347",
     "nets": {
       "tytTurkce": 25,
       "tytMatematik": 21,
@@ -4146,7 +4146,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 21451,
     "baseScore": 437.15,
     "baseScore1": 422.81,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=103890226",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=103890226",
     "nets": {
       "tytTurkce": 35,
       "tytMatematik": 12.75,
@@ -4179,7 +4179,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 9088,
     "baseScore": 437.12,
     "baseScore1": 433.05,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=203710108",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=203710108",
     "nets": {
       "tytTurkce": 33.75,
       "tytMatematik": 22.25,
@@ -4212,7 +4212,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 29016,
     "baseScore": 436.87,
     "baseScore1": 402.15,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=109610058",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=109610058",
     "nets": {
       "tytTurkce": 32.5,
       "tytMatematik": 16.25,
@@ -4245,7 +4245,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 10225,
     "baseScore": 436.78,
     "baseScore1": 423.91,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=200510588",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=200510588",
     "nets": {
       "tytTurkce": 30.25,
       "tytMatematik": 25.25,
@@ -4278,7 +4278,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 24740,
     "baseScore": 436.16,
     "baseScore1": 419.47,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=206010487",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=206010487",
     "nets": {
       "tytTurkce": 27.5,
       "tytMatematik": 16,
@@ -4311,7 +4311,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 11567,
     "baseScore": 435.85,
     "baseScore1": 434.39,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=108410187",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=108410187",
     "nets": {
       "tytTurkce": 33.75,
       "tytMatematik": 24.75,
@@ -4344,7 +4344,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": null,
     "baseScore": 435.59,
     "baseScore1": 423.17,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=207250064",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=207250064",
     "nets": {
       "tytTurkce": 31.25,
       "tytMatematik": 21.75,
@@ -4377,7 +4377,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 24427,
     "baseScore": 435.53,
     "baseScore1": 421.17,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=109710215",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=109710215",
     "nets": {
       "tytTurkce": 33.5,
       "tytMatematik": 17.75,
@@ -4410,7 +4410,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 25940,
     "baseScore": 434.99,
     "baseScore1": 420.7,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=108910401",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=108910401",
     "nets": {
       "tytTurkce": 28.75,
       "tytMatematik": 20,
@@ -4443,7 +4443,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 27807,
     "baseScore": 434.93,
     "baseScore1": 416.04,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=205850563",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=205850563",
     "nets": {
       "tytTurkce": 30,
       "tytMatematik": 25,
@@ -4476,7 +4476,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 23217,
     "baseScore": 434.85,
     "baseScore1": 418.44,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=203010187",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=203010187",
     "nets": {
       "tytTurkce": 27.75,
       "tytMatematik": 18.75,
@@ -4509,7 +4509,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 27287,
     "baseScore": 434.8,
     "baseScore1": 416.22,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=204950395",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=204950395",
     "nets": {
       "tytTurkce": 27.5,
       "tytMatematik": 18.75,
@@ -4542,7 +4542,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 23890,
     "baseScore": 434.72,
     "baseScore1": 419.06,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=209510039",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=209510039",
     "nets": {
       "tytTurkce": 30,
       "tytMatematik": 20,
@@ -4575,7 +4575,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 5778,
     "baseScore": 434.33,
     "baseScore1": 459.58,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=108410257",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=108410257",
     "nets": {
       "tytTurkce": 35,
       "tytMatematik": 25.25,
@@ -4608,7 +4608,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 24502,
     "baseScore": 433.67,
     "baseScore1": 411.94,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=208610087",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=208610087",
     "nets": {
       "tytTurkce": 33.25,
       "tytMatematik": 19.25,
@@ -4641,7 +4641,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 7858,
     "baseScore": 433.66,
     "baseScore1": 430.31,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=202110726",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=202110726",
     "nets": {
       "tytTurkce": 29.5,
       "tytMatematik": 24.5,
@@ -4674,7 +4674,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 28872,
     "baseScore": 433.63,
     "baseScore1": 414.61,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=203210731",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=203210731",
     "nets": {
       "tytTurkce": 31.75,
       "tytMatematik": 17,
@@ -4707,7 +4707,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 46828,
     "baseScore": 433.56,
     "baseScore1": 411.77,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=110190119",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=110190119",
     "nets": {
       "tytTurkce": 32.5,
       "tytMatematik": 13.5,
@@ -4740,7 +4740,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 6969,
     "baseScore": 433.14,
     "baseScore1": 427.56,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=202590245",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=202590245",
     "nets": {
       "tytTurkce": 35,
       "tytMatematik": 25.5,
@@ -4773,7 +4773,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 8743,
     "baseScore": 433.08,
     "baseScore1": 436.55,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=102270182",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=102270182",
     "nets": {
       "tytTurkce": 30,
       "tytMatematik": 17,
@@ -4806,7 +4806,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 17270,
     "baseScore": 433.07,
     "baseScore1": 424.54,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=206100311",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=206100311",
     "nets": {
       "tytTurkce": 31,
       "tytMatematik": 25,
@@ -4839,7 +4839,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 29773,
     "baseScore": 433.06,
     "baseScore1": 417.88,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=106910179",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=106910179",
     "nets": {
       "tytTurkce": 27.5,
       "tytMatematik": 22.25,
@@ -4872,7 +4872,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 28368,
     "baseScore": 432.96,
     "baseScore1": 417.68,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=101190408",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=101190408",
     "nets": {
       "tytTurkce": 25,
       "tytMatematik": 18.25,
@@ -4905,7 +4905,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 10831,
     "baseScore": 432.95,
     "baseScore1": 415.44,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=200510622",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=200510622",
     "nets": {
       "tytTurkce": 30.25,
       "tytMatematik": 14.25,
@@ -4938,7 +4938,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 24833,
     "baseScore": 432.79,
     "baseScore1": 417.12,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=210301417",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=210301417",
     "nets": {
       "tytTurkce": 25.25,
       "tytMatematik": 21.5,
@@ -4971,7 +4971,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 13904,
     "baseScore": 432.73,
     "baseScore1": 421.7,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=203790200",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=203790200",
     "nets": {
       "tytTurkce": 26.75,
       "tytMatematik": 18.75,
@@ -5004,7 +5004,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 28886,
     "baseScore": 432.37,
     "baseScore1": 415.65,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=202410502",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=202410502",
     "nets": {
       "tytTurkce": 35.25,
       "tytMatematik": 18.75,
@@ -5037,7 +5037,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 29824,
     "baseScore": 431.99,
     "baseScore1": 416.98,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=105761158",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=105761158",
     "nets": {
       "tytTurkce": 26.5,
       "tytMatematik": 16.5,
@@ -5070,7 +5070,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 10106,
     "baseScore": 431.92,
     "baseScore1": 429.68,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=200690615",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=200690615",
     "nets": {
       "tytTurkce": 31.25,
       "tytMatematik": 23.25,
@@ -5103,7 +5103,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 11873,
     "baseScore": 431.31,
     "baseScore1": 421.36,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=200590193",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=200590193",
     "nets": {
       "tytTurkce": 31.25,
       "tytMatematik": 15.5,
@@ -5136,7 +5136,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 27248,
     "baseScore": 431.06,
     "baseScore1": 412.58,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=208610078",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=208610078",
     "nets": {
       "tytTurkce": 30,
       "tytMatematik": 22.5,
@@ -5169,7 +5169,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 33437,
     "baseScore": 430.53,
     "baseScore1": 410.54,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=201410295",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=201410295",
     "nets": {
       "tytTurkce": 30.25,
       "tytMatematik": 22,
@@ -5202,7 +5202,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 14524,
     "baseScore": 430.17,
     "baseScore1": 417.72,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=203111678",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=203111678",
     "nets": {
       "tytTurkce": 31.5,
       "tytMatematik": 12.75,
@@ -5235,7 +5235,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 10851,
     "baseScore": 430.12,
     "baseScore1": 421.82,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=207210013",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=207210013",
     "nets": {
       "tytTurkce": 31.25,
       "tytMatematik": 13.5,
@@ -5268,7 +5268,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 7963,
     "baseScore": 430.07,
     "baseScore1": 425.08,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=202510201",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=202510201",
     "nets": {
       "tytTurkce": 30.75,
       "tytMatematik": 25.25,
@@ -5301,7 +5301,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 27406,
     "baseScore": 430.03,
     "baseScore1": 418.6,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=104810486",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=104810486",
     "nets": {
       "tytTurkce": 34,
       "tytMatematik": 13.5,
@@ -5334,7 +5334,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 16717,
     "baseScore": 429.66,
     "baseScore1": 419.68,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=207210049",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=207210049",
     "nets": {
       "tytTurkce": 28.75,
       "tytMatematik": 22.75,
@@ -5367,7 +5367,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 26412,
     "baseScore": 429.6,
     "baseScore1": 416.38,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=107210411",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=107210411",
     "nets": {
       "tytTurkce": 32.5,
       "tytMatematik": 11,
@@ -5400,7 +5400,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 32985,
     "baseScore": 428.99,
     "baseScore1": 414.36,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=102910482",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=102910482",
     "nets": {
       "tytTurkce": 32,
       "tytMatematik": 14,
@@ -5433,7 +5433,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 35752,
     "baseScore": 428.82,
     "baseScore1": 414.4,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=103510235",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=103510235",
     "nets": {
       "tytTurkce": 31.25,
       "tytMatematik": 14,
@@ -5466,7 +5466,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 35838,
     "baseScore": 428.78,
     "baseScore1": 409.62,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=206410660",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=206410660",
     "nets": {
       "tytTurkce": 33.75,
       "tytMatematik": 23,
@@ -5499,7 +5499,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 6612,
     "baseScore": 428.78,
     "baseScore1": 413.08,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=205410705",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=205410705",
     "nets": {
       "tytTurkce": 28.75,
       "tytMatematik": 18.5,
@@ -5532,7 +5532,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 33542,
     "baseScore": 428.56,
     "baseScore1": 411.5,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=202210338",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=202210338",
     "nets": {
       "tytTurkce": 23,
       "tytMatematik": 13.75,
@@ -5565,7 +5565,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 36096,
     "baseScore": 427.86,
     "baseScore1": 412.61,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=101590157",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=101590157",
     "nets": {
       "tytTurkce": 27.75,
       "tytMatematik": 15.75,
@@ -5598,7 +5598,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 39338,
     "baseScore": 427.56,
     "baseScore1": 410.91,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=108810774",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=108810774",
     "nets": {
       "tytTurkce": 35,
       "tytMatematik": 11.25,
@@ -5631,7 +5631,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 9039,
     "baseScore": 427.25,
     "baseScore1": 396.28,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=202110911",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=202110911",
     "nets": {
       "tytTurkce": 32.5,
       "tytMatematik": 10.5,
@@ -5664,7 +5664,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 15694,
     "baseScore": 427.13,
     "baseScore1": 425.32,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=101110263",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=101110263",
     "nets": {
       "tytTurkce": 33,
       "tytMatematik": 16,
@@ -5697,7 +5697,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 38298,
     "baseScore": 427.01,
     "baseScore1": 411.31,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=108690097",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=108690097",
     "nets": {
       "tytTurkce": 25,
       "tytMatematik": 17.75,
@@ -5730,7 +5730,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 6247,
     "baseScore": 426.85,
     "baseScore1": 417.5,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=202510104",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=202510104",
     "nets": {
       "tytTurkce": 30,
       "tytMatematik": 21,
@@ -5763,7 +5763,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 20734,
     "baseScore": 426.8,
     "baseScore1": 410.93,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=205410362",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=205410362",
     "nets": {
       "tytTurkce": 32.5,
       "tytMatematik": 18.5,
@@ -5796,7 +5796,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 33736,
     "baseScore": 426.59,
     "baseScore1": 410.06,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=204711051",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=204711051",
     "nets": {
       "tytTurkce": 21.25,
       "tytMatematik": 17.25,
@@ -5829,7 +5829,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 44852,
     "baseScore": 426.52,
     "baseScore1": 404.72,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=204610471",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=204610471",
     "nets": {
       "tytTurkce": 31.5,
       "tytMatematik": 16,
@@ -5862,7 +5862,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 4762,
     "baseScore": 426.12,
     "baseScore1": 421.71,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=204810837",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=204810837",
     "nets": {
       "tytTurkce": 34,
       "tytMatematik": 16.25,
@@ -5895,7 +5895,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": null,
     "baseScore": 426.06,
     "baseScore1": 404.64,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=202990400",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=202990400",
     "nets": {
       "tytTurkce": 29,
       "tytMatematik": 25.5,
@@ -5928,7 +5928,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 16634,
     "baseScore": 426.02,
     "baseScore1": 423.74,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=109610146",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=109610146",
     "nets": {
       "tytTurkce": 35,
       "tytMatematik": 21.75,
@@ -5961,7 +5961,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": null,
     "baseScore": 425.77,
     "baseScore1": 0,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=206700101",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=206700101",
     "nets": {
       "tytTurkce": 31,
       "tytMatematik": 25,
@@ -5994,7 +5994,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 17678,
     "baseScore": 424.86,
     "baseScore1": 415.97,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=203490279",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=203490279",
     "nets": {
       "tytTurkce": 27.25,
       "tytMatematik": 17.25,
@@ -6027,7 +6027,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 37495,
     "baseScore": 424.81,
     "baseScore1": 407.14,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=201210588",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=201210588",
     "nets": {
       "tytTurkce": 31.25,
       "tytMatematik": 21.25,
@@ -6060,7 +6060,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 37541,
     "baseScore": 424.65,
     "baseScore1": 409.64,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=112910024",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=112910024",
     "nets": {
       "tytTurkce": 23.5,
       "tytMatematik": 17,
@@ -6093,7 +6093,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 32952,
     "baseScore": 424.4,
     "baseScore1": 410.48,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=107210386",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=107210386",
     "nets": {
       "tytTurkce": 32.5,
       "tytMatematik": 17,
@@ -6126,7 +6126,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 41263,
     "baseScore": 424.25,
     "baseScore1": 409.2,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=100190208",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=100190208",
     "nets": {
       "tytTurkce": 33.75,
       "tytMatematik": 15.25,
@@ -6159,7 +6159,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 51240,
     "baseScore": 423.29,
     "baseScore1": 404.67,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=104810405",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=104810405",
     "nets": {
       "tytTurkce": 26.75,
       "tytMatematik": 16.75,
@@ -6192,7 +6192,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 35621,
     "baseScore": 423.13,
     "baseScore1": 410.78,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=111110062",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=111110062",
     "nets": {
       "tytTurkce": 29,
       "tytMatematik": 21.5,
@@ -6225,7 +6225,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 15530,
     "baseScore": 422.93,
     "baseScore1": 417.22,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=105610255",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=105610255",
     "nets": {
       "tytTurkce": 28.25,
       "tytMatematik": 9.25,
@@ -6258,7 +6258,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 22348,
     "baseScore": 422.86,
     "baseScore1": 417.16,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=105690485",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=105690485",
     "nets": {
       "tytTurkce": 27.75,
       "tytMatematik": 20.25,
@@ -6291,7 +6291,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 41290,
     "baseScore": 422.74,
     "baseScore1": 407.89,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=108210841",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=108210841",
     "nets": {
       "tytTurkce": 35,
       "tytMatematik": 18.75,
@@ -6324,7 +6324,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 21769,
     "baseScore": 422.68,
     "baseScore1": 417.03,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=104190568",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=104190568",
     "nets": {
       "tytTurkce": 35,
       "tytMatematik": 17,
@@ -6357,7 +6357,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 39769,
     "baseScore": 422.67,
     "baseScore1": 406.02,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=206210634",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=206210634",
     "nets": {
       "tytTurkce": 30,
       "tytMatematik": 22.5,
@@ -6390,7 +6390,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 43254,
     "baseScore": 422.46,
     "baseScore1": 407.05,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=106610146",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=106610146",
     "nets": {
       "tytTurkce": 27.5,
       "tytMatematik": 18,
@@ -6423,7 +6423,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 15562,
     "baseScore": 422.19,
     "baseScore1": 414.98,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=200510367",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=200510367",
     "nets": {
       "tytTurkce": 35.5,
       "tytMatematik": 15.5,
@@ -6456,7 +6456,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 48656,
     "baseScore": 421.84,
     "baseScore1": 404.18,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=101190339",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=101190339",
     "nets": {
       "tytTurkce": 33.75,
       "tytMatematik": 14,
@@ -6489,7 +6489,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 41249,
     "baseScore": 421.64,
     "baseScore1": 402.12,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=201790218",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=201790218",
     "nets": {
       "tytTurkce": 25.5,
       "tytMatematik": 22,
@@ -6522,7 +6522,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 20595,
     "baseScore": 421.5,
     "baseScore1": 408.45,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=206011246",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=206011246",
     "nets": {
       "tytTurkce": 28.75,
       "tytMatematik": 18.75,
@@ -6555,7 +6555,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 21552,
     "baseScore": 421.45,
     "baseScore1": 412.11,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=103410096",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=103410096",
     "nets": {
       "tytTurkce": 30,
       "tytMatematik": 14,
@@ -6588,7 +6588,7 @@ export const YOK_ATLAS_PROGRAMS = [
     "rank2": 17694,
     "baseScore": 421.33,
     "baseScore1": 418.33,
-    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/lisans-anasayfa.php?y=104010016",
+    "yokAtlasUrl": "https://yokatlas.yok.gov.tr/?program=104010016",
     "nets": {
       "tytTurkce": 28.75,
       "tytMatematik": 15,

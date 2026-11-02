@@ -3,7 +3,7 @@ import {
   Compass, ExternalLink, Target, Search, CheckCircle, 
   ChevronRight, Award, AlertCircle, ArrowUpRight, ArrowDownRight, 
   Sparkles, Filter, RotateCcw, Building2, BookOpen, MapPin, 
-  Layers, Check, Eye, X, ChevronLeft, Info
+  Layers, Check, Eye, X, ChevronLeft, Info, Copy
 } from 'lucide-react';
 import { YOK_ATLAS_PROGRAMS } from '../data/yokAtlasData';
 
@@ -21,6 +21,9 @@ export default function YokAtlasTracker({
   const [filterCode, setFilterCode] = useState('');
   const [minRank, setMinRank] = useState('');
   const [maxRank, setMaxRank] = useState('');
+
+  // Kopyalama / Güvenli YÖK Atlas Bildirim Toast'u
+  const [copyToast, setCopyToast] = useState(null);
 
   // Arama Tetikleyicisi
   const [appliedFilters, setAppliedFilters] = useState({
@@ -148,6 +151,22 @@ export default function YokAtlasTracker({
   const totalPages = Math.ceil(filteredList.length / pageSize) || 1;
   const paginatedList = filteredList.slice((currentPage - 1) * pageSize, currentPage * pageSize);
 
+  // Güvenli YÖK Atlas Portalı Açma (WAF HTTP 418 Koruması Güvenli Çözüm)
+  const handleOpenYokAtlasSafe = (program) => {
+    const code = program.kilavuzKodu || String(program.id).replace('yok_', '');
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(String(code));
+    }
+    setCopyToast(`📋 ÖSYM Program Kodu (${code}) kopyalandı! YÖK Atlas arama kutusuna yapıştırarak resmi sayfayı güvenle açabilirsiniz.`);
+    setTimeout(() => {
+      setCopyToast(null);
+    }, 6000);
+
+    // Modern YÖK Atlas SPA sayfasına no-referrer ile güvenle yönlendir
+    // (Eski lisans-anasayfa.php doğrudan link verildiğinde WAF HTTP 418 engeli verir)
+    window.open('https://yokatlas.yok.gov.tr/', '_blank', 'noopener,noreferrer');
+  };
+
   // Net Fark Satırı Bileşeni
   const NetGapRow = ({ label, current, target, isTotal = false }) => {
     const diff = (current - target).toFixed(1);
@@ -155,14 +174,14 @@ export default function YokAtlasTracker({
 
     return (
       <tr className={`border-b border-slate-100 ${isTotal ? 'bg-indigo-50/70 font-black' : 'hover:bg-slate-50'}`}>
-        <td className="py-2 px-3 text-xs sm:text-sm text-slate-800 font-semibold">{label}</td>
-        <td className="py-2 px-3 text-center text-xs sm:text-sm font-bold text-slate-900">{current.toFixed(1)}</td>
-        <td className="py-2 px-3 text-center text-xs sm:text-sm font-bold text-indigo-700">{target.toFixed(1)}</td>
-        <td className="py-2 px-3 text-right">
-          <span className={`inline-flex items-center gap-1 text-xs font-black px-2 py-0.5 rounded-full ${
+        <td className="py-2.5 px-3 text-xs sm:text-sm text-slate-800 font-semibold">{label}</td>
+        <td className="py-2.5 px-3 text-center text-xs sm:text-sm font-bold text-slate-900">{current.toFixed(1)}</td>
+        <td className="py-2.5 px-3 text-center text-xs sm:text-sm font-bold text-indigo-700">{target.toFixed(1)}</td>
+        <td className="py-2.5 px-3 text-right">
+          <span className={`inline-flex items-center gap-1 text-xs font-black px-2.5 py-0.5 rounded-full ${
             isAhead ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'
           }`}>
-            {isAhead ? <ArrowUpRight className="w-3 h-3" /> : <ArrowDownRight className="w-3 h-3" />}
+            {isAhead ? <ArrowUpRight className="w-3.5 h-3.5" /> : <ArrowDownRight className="w-3.5 h-3.5" />}
             {isAhead ? `+${diff}` : diff}
           </span>
         </td>
@@ -194,27 +213,135 @@ export default function YokAtlasTracker({
           </div>
         </div>
 
-        {/* Aktif Hedef Rozeti */}
-        <div className="flex items-center gap-3 bg-indigo-50 border border-indigo-200/80 p-2.5 sm:px-4 sm:py-2 rounded-2xl">
-          <Target className="w-5 h-5 text-indigo-600 flex-shrink-0" />
-          <div className="text-left">
-            <span className="text-[10px] font-bold text-indigo-600 uppercase tracking-wider block">
-              Emir'in Birincil Hedefi:
-            </span>
-            <span className="text-xs sm:text-sm font-extrabold text-slate-900 block truncate max-w-[200px] sm:max-w-xs">
-              {currentTarget.university} - {currentTarget.department}
-            </span>
-          </div>
-          <button
-            onClick={() => setInspectProgram(currentTarget)}
-            className="ml-auto text-xs font-bold text-indigo-700 hover:text-indigo-900 underline flex-shrink-0"
-          >
-            Kıyasla
-          </button>
-        </div>
+        {/* Güvenli YÖK Atlas Butonu */}
+        <button
+          onClick={() => handleOpenYokAtlasSafe(currentTarget)}
+          className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-2xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs shadow-md transition active:scale-95"
+          title="YÖK Atlas Resmi Portalını Aç"
+        >
+          <ExternalLink className="w-4 h-4 text-rose-400" />
+          <span>Resmi YÖK Atlas Portalı</span>
+        </button>
       </div>
 
-      {/* 2. TERCİH SİHİRBAZI FİLTRELEME FORMU (Görseldeki YÖK Atlas Şablonu) */}
+      {/* Kopyalama ve Güvenli Bağlantı Bildirimi */}
+      {copyToast && (
+        <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-900 text-xs sm:text-sm font-bold flex items-center justify-between gap-3 animate-in fade-in duration-200 shadow-sm">
+          <div className="flex items-center gap-2">
+            <CheckCircle className="w-5 h-5 text-emerald-600 flex-shrink-0" />
+            <span>{copyToast}</span>
+          </div>
+          <button 
+            onClick={() => setCopyToast(null)}
+            className="text-emerald-700 hover:text-emerald-900 text-xs font-extrabold px-2 py-1"
+          >
+            Tamam
+          </button>
+        </div>
+      )}
+
+      {/* 2. AKTİF HEDEF VE KARŞILAŞTIRMALI NET ANALİZİ KARTI (Kullanıcının İstediği Bölüm) */}
+      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white p-5 sm:p-8 shadow-xl border border-slate-800">
+        <div className="absolute top-0 right-0 -mr-16 -mt-16 w-64 h-64 rounded-full bg-indigo-500/15 blur-3xl pointer-events-none"></div>
+
+        <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+          <div className="space-y-2 max-w-2xl">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-white/10 text-amber-300 backdrop-blur-sm border border-white/10">
+              <Target className="w-3.5 h-3.5 text-amber-400" />
+              <span>Emir'in Aktif YÖK Atlas Hedefi</span>
+            </div>
+            <h2 className="text-xl sm:text-3xl font-black tracking-tight text-white">
+              {currentTarget.university}
+            </h2>
+            <p className="text-sm sm:text-base text-indigo-200 font-bold">
+              {currentTarget.department} ({currentTarget.scoreType})
+            </p>
+            <p className="text-xs text-slate-300 max-w-xl">
+              ÖSYM Kılavuz Kodu: <b className="text-white font-mono bg-white/10 px-2 py-0.5 rounded">{currentTarget.kilavuzKodu}</b> • {currentTarget.faculty} ({currentTarget.city} - {currentTarget.universityType})
+            </p>
+          </div>
+
+          {/* Hedef Metrikleri & Butonlar */}
+          <div className="flex flex-wrap sm:flex-nowrap items-center gap-3">
+            <div className="bg-white/10 backdrop-blur-md rounded-2xl p-3.5 border border-white/10 text-center min-w-[100px]">
+              <span className="text-[10px] text-indigo-300 block font-bold uppercase">2024 Sıralama</span>
+              <span className="text-lg sm:text-xl font-black text-amber-300">
+                #{currentTarget.rank.toLocaleString()}
+              </span>
+            </div>
+
+            <div className="bg-white/10 backdrop-blur-md rounded-2xl p-3.5 border border-white/10 text-center min-w-[100px]">
+              <span className="text-[10px] text-indigo-300 block font-bold uppercase">Taban Puan</span>
+              <span className="text-lg sm:text-xl font-black text-white">
+                {currentTarget.baseScore > 0 ? currentTarget.baseScore : '---'}
+              </span>
+            </div>
+
+            <button
+              onClick={() => handleOpenYokAtlasSafe(currentTarget)}
+              className="flex items-center gap-2 px-4 py-3.5 rounded-2xl bg-indigo-600 hover:bg-indigo-500 text-white font-black text-xs sm:text-sm shadow-lg transition active:scale-95"
+              title="Resmi YÖK Atlas Sitesini Güvenle Aç"
+            >
+              <ExternalLink className="w-4 h-4" />
+              <span>YÖK Atlas'ta Aç</span>
+            </button>
+          </div>
+        </div>
+
+        {/* Karşılaştırmalı Net Tablosu */}
+        <div className="mt-6 pt-6 border-t border-white/10">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="text-sm sm:text-base font-extrabold text-white flex items-center gap-2">
+              <Sparkles className="w-4 h-4 text-amber-400" />
+              Hedefe Kalan Net Analizi (Emir vs YÖK Atlas)
+            </h3>
+            <span className="text-xs text-indigo-300 font-medium hidden sm:inline">
+              Son deneme ortalamaların ile hedeflenen netler kıyaslanmaktadır
+            </span>
+          </div>
+
+          <div className="overflow-x-auto rounded-2xl bg-white text-slate-900 shadow-md">
+            <table className="w-full text-left border-collapse text-xs sm:text-sm">
+              <thead>
+                <tr className="bg-slate-100 border-b border-slate-200 text-[10px] uppercase tracking-wider text-slate-600 font-extrabold">
+                  <th className="py-2.5 px-3">Ders Adı</th>
+                  <th className="py-2.5 px-3 text-center">Emir'in Ort. Neti</th>
+                  <th className="py-2.5 px-3 text-center">YÖK Atlas Hedef Net</th>
+                  <th className="py-2.5 px-3 text-right">Fark / Durum</th>
+                </tr>
+              </thead>
+              <tbody>
+                {/* 1. Aşama TYT */}
+                <tr className="bg-slate-50 font-bold text-[11px] text-indigo-900">
+                  <td colSpan="4" className="py-1 px-3 uppercase tracking-wider">
+                    1. AŞAMA (TYT) DERSLERİ
+                  </td>
+                </tr>
+                <NetGapRow label="Türkçe (40 Soru)" current={emirNets.tytTurkce} target={currentTarget.nets.tytTurkce} />
+                <NetGapRow label="Temel Matematik (40 Soru)" current={emirNets.tytMatematik} target={currentTarget.nets.tytMatematik} />
+                <NetGapRow label="Sosyal Bilimler (20 Soru)" current={emirNets.tytSosyal} target={currentTarget.nets.tytSosyal} />
+                <NetGapRow label="Fen Bilimleri (20 Soru)" current={emirNets.tytFen} target={currentTarget.nets.tytFen} />
+                <NetGapRow label="TOPLAM TYT NETİ" current={emirNets.tytTotal} target={currentTarget.nets.tytTotal} isTotal={true} />
+
+                {/* 2. Aşama AYT */}
+                <tr className="bg-slate-50 font-bold text-[11px] text-purple-900">
+                  <td colSpan="4" className="py-1 px-3 uppercase tracking-wider">
+                    2. AŞAMA (AYT - EŞİT AĞIRLIK) DERSLERİ
+                  </td>
+                </tr>
+                <NetGapRow label="AYT Matematik (40 Soru)" current={emirNets.aytMatematik} target={currentTarget.nets.aytMatematik} />
+                <NetGapRow label="Türk Dili ve Edebiyatı (24 Soru)" current={emirNets.aytEdebiyat} target={currentTarget.nets.aytEdebiyat} />
+                <NetGapRow label="Tarih-1 (10 Soru)" current={emirNets.aytTarih1} target={currentTarget.nets.aytTarih1} />
+                <NetGapRow label="Coğrafya-1 (6 Soru)" current={emirNets.aytCografya1} target={currentTarget.nets.aytCografya1} />
+                <NetGapRow label="TOPLAM AYT NETİ" current={emirNets.aytTotal} target={currentTarget.nets.aytTotal} isTotal={true} />
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+
+      {/* 3. TERCİH SİHİRBAZI FİLTRELEME FORMU (Görseldeki YÖK Atlas Şablonu) */}
       <div className="bg-white rounded-3xl p-5 sm:p-7 border border-slate-200 shadow-sm">
         <div className="flex items-center justify-between pb-4 mb-4 border-b border-slate-100">
           <div className="flex items-center gap-2">
@@ -656,15 +783,15 @@ export default function YokAtlasTracker({
 
             {/* Modal Alt Barı: Hedef Olarak Seç & YÖK Atlas Sayfasına Git */}
             <div className="p-4 bg-slate-50 border-t border-slate-200 flex items-center justify-between gap-3">
-              <a
-                href={inspectProgram.yokAtlasUrl}
-                target="_blank"
-                rel="noopener noreferrer"
+              <button
+                onClick={() => handleOpenYokAtlasSafe(inspectProgram)}
                 className="flex items-center gap-1.5 text-xs font-bold text-slate-700 hover:text-indigo-600 transition"
+                title="ÖSYM Kodunu Kopyala ve Resmi YÖK Atlas Portalı'nı Aç"
               >
-                <span>Resmi YÖK Atlas Sayfası</span>
+                <Copy className="w-3.5 h-3.5 text-slate-400" />
+                <span>Resmi YÖK Atlas Portalı</span>
                 <ExternalLink className="w-3.5 h-3.5" />
-              </a>
+              </button>
 
               <div className="flex items-center gap-2">
                 <button

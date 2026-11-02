@@ -16,6 +16,8 @@ export default function Dashboard({
 }) {
   const [selectedExamDetail, setSelectedExamDetail] = useState(null);
   const [filterStage, setFilterStage] = useState('ALL'); // 'ALL', 'TYT', 'AYT'
+  const [chartView, setChartView] = useState('ALL'); // 'ALL', 'TYT', 'AYT'
+  const [activeChartExam, setActiveChartExam] = useState(null);
 
   // Filtrelenmiş denemeler
   const filteredExams = exams.filter(e => {
@@ -27,11 +29,16 @@ export default function Dashboard({
   const tytExams = exams.filter(e => e.stage === 'TYT');
   const aytExams = exams.filter(e => e.stage === 'AYT');
 
-  // Son denemeler
-  const latestTyt = tytExams.length > 0 ? tytExams[0] : null;
-  const latestAyt = aytExams.length > 0 ? aytExams[0] : null;
-  const previousTyt = tytExams.length > 1 ? tytExams[1] : null;
-  const previousAyt = aytExams.length > 1 ? aytExams[1] : null;
+  // Kronolojik sıralı denemeler (Grafik için: Eskiden Yeniye, Soldan Sağa)
+  const chronologicalExams = [...exams].sort((a, b) => new Date(a.date) - new Date(b.date));
+  const chronologicalTyt = [...tytExams].sort((a, b) => new Date(a.date) - new Date(b.date));
+  const chronologicalAyt = [...aytExams].sort((a, b) => new Date(a.date) - new Date(b.date));
+
+  // Son denemeler (En yeni denemeler)
+  const latestTyt = chronologicalTyt.length > 0 ? chronologicalTyt[chronologicalTyt.length - 1] : null;
+  const latestAyt = chronologicalAyt.length > 0 ? chronologicalAyt[chronologicalAyt.length - 1] : null;
+  const previousTyt = chronologicalTyt.length > 1 ? chronologicalTyt[chronologicalTyt.length - 2] : null;
+  const previousAyt = chronologicalAyt.length > 1 ? chronologicalAyt[chronologicalAyt.length - 2] : null;
 
   // Ortalamalar
   const avgTytNet = tytExams.length > 0 
@@ -197,134 +204,343 @@ export default function Dashboard({
               Net Gelişim ve Başarı Trendi
             </h3>
             <p className="text-xs text-slate-500">
-              Zaman içerisindeki 1. Aşama (TYT) ve 2. Aşama (AYT) netlerinin yükseliş grafiği
+              Kronolojik sıralı (Eskiden Yeniye) 1. Aşama (TYT) ve 2. Aşama (AYT) gelişim grafiği
             </p>
           </div>
           
-          <div className="flex items-center gap-3 text-xs font-semibold">
-            <span className="inline-flex items-center gap-1.5 text-indigo-600">
-              <span className="w-3 h-3 rounded-full bg-indigo-600"></span>
-              1. Aşama (TYT)
-            </span>
-            <span className="inline-flex items-center gap-1.5 text-purple-600">
-              <span className="w-3 h-3 rounded-full bg-purple-600"></span>
-              2. Aşama (AYT)
-            </span>
+          <div className="flex items-center gap-2">
+            {/* Görünüm Filtresi */}
+            <div className="flex items-center bg-slate-100 p-1 rounded-xl text-xs font-bold">
+              <button
+                onClick={() => setChartView('ALL')}
+                className={`px-3 py-1 rounded-lg transition ${chartView === 'ALL' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-800'}`}
+              >
+                Tümü (Birleşik)
+              </button>
+              <button
+                onClick={() => setChartView('TYT')}
+                className={`px-3 py-1 rounded-lg transition ${chartView === 'TYT' ? 'bg-white text-indigo-700 shadow-sm' : 'text-slate-500 hover:text-slate-800'}`}
+              >
+                1. Aşama (TYT)
+              </button>
+              <button
+                onClick={() => setChartView('AYT')}
+                className={`px-3 py-1 rounded-lg transition ${chartView === 'AYT' ? 'bg-white text-purple-700 shadow-sm' : 'text-slate-500 hover:text-slate-800'}`}
+              >
+                2. Aşama (AYT)
+              </button>
+            </div>
           </div>
+        </div>
+
+        {/* Gösterge Açıklamaları */}
+        <div className="flex items-center gap-4 text-xs font-semibold mb-4 px-2">
+          {(chartView === 'ALL' || chartView === 'TYT') && (
+            <div className="flex items-center gap-2">
+              <span className="w-3 h-3 rounded-full bg-indigo-600 shadow-sm shadow-indigo-300"></span>
+              <span className="text-slate-700">1. Aşama (TYT - 120 Soru)</span>
+            </div>
+          )}
+          {(chartView === 'ALL' || chartView === 'AYT') && (
+            <div className="flex items-center gap-2">
+              <span className="w-3 h-3 rounded-full bg-purple-600 shadow-sm shadow-purple-300"></span>
+              <span className="text-slate-700">2. Aşama (AYT EA - 80 Soru)</span>
+            </div>
+          )}
         </div>
 
         {/* Görsel SVG Çizgi Grafiği */}
         {exams.length > 0 ? (
-          <div className="w-full h-64 sm:h-72 relative">
-            <svg className="w-full h-full overflow-visible" viewBox="0 0 600 240" preserveAspectRatio="none">
-              <defs>
-                <linearGradient id="tytGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#4f46e5" stopOpacity="0.25" />
-                  <stop offset="100%" stopColor="#4f46e5" stopOpacity="0.0" />
-                </linearGradient>
-                <linearGradient id="aytGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#9333ea" stopOpacity="0.25" />
-                  <stop offset="100%" stopColor="#9333ea" stopOpacity="0.0" />
-                </linearGradient>
-              </defs>
+          <div className="w-full relative">
+            <div className="w-full h-64 sm:h-72">
+              <svg className="w-full h-full overflow-visible" viewBox="0 0 620 250" preserveAspectRatio="none">
+                <defs>
+                  <linearGradient id="tytGradClean" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#4f46e5" stopOpacity="0.20" />
+                    <stop offset="100%" stopColor="#4f46e5" stopOpacity="0.0" />
+                  </linearGradient>
+                  <linearGradient id="aytGradClean" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#9333ea" stopOpacity="0.20" />
+                    <stop offset="100%" stopColor="#9333ea" stopOpacity="0.0" />
+                  </linearGradient>
+                  <filter id="badgeShadow" x="-20%" y="-20%" width="140%" height="140%">
+                    <feDropShadow dx="0" dy="2" stdDeviation="2" floodOpacity="0.15" />
+                  </filter>
+                </defs>
 
-              {/* Yatay Kılavuz Çizgileri */}
-              {[0, 25, 50, 75, 100].map((val, idx) => {
-                const y = 220 - (val / 100) * 190;
-                return (
-                  <g key={idx}>
-                    <line x1="30" y1={y} x2="590" y2={y} stroke="#f1f5f9" strokeWidth="1.5" strokeDasharray="3 3" />
-                    <text x="10" y={y + 4} fill="#94a3b8" fontSize="10" fontWeight="bold">
-                      {val}
-                    </text>
-                  </g>
-                );
-              })}
+                {/* Yatay Kılavuz Çizgileri ve Ölçek */}
+                {[0, 25, 50, 75, 100].map((val, idx) => {
+                  const y = 210 - (val / 100) * 175;
+                  return (
+                    <g key={idx}>
+                      <line x1="45" y1={y} x2="600" y2={y} stroke="#f1f5f9" strokeWidth="1.5" strokeDasharray="4 4" />
+                      <text x="15" y={y + 4} fill="#94a3b8" fontSize="10" fontWeight="bold">
+                        {val}
+                      </text>
+                    </g>
+                  );
+                })}
 
-              {/* TYT Çizgisi ve Alanı */}
-              {(() => {
-                const tytPoints = [...tytExams].reverse();
-                if (tytPoints.length === 0) return null;
-                const maxNet = 120;
-                const pointsStr = tytPoints.map((item, i) => {
-                  const x = 50 + (i / Math.max(1, tytPoints.length - 1)) * 520;
-                  const y = 220 - (Math.min(100, (item.totalNet / maxNet) * 100) / 100) * 190;
-                  return `${x},${y}`;
-                }).join(' ');
+                {/* Dinamik Kronolojik Zaman Çizelgesi Hesaplaması */}
+                {(() => {
+                  // İlgili görünüme göre denemeleri belirle
+                  const activeExams = chartView === 'TYT' 
+                    ? chronologicalTyt 
+                    : chartView === 'AYT' 
+                      ? chronologicalAyt 
+                      : chronologicalExams;
 
-                const firstX = 50;
-                const lastX = 50 + (tytPoints.length > 1 ? 520 : 0);
-                const areaPath = `M ${firstX},220 L ${pointsStr} L ${lastX},220 Z`;
+                  if (activeExams.length === 0) return null;
 
-                return (
-                  <g>
-                    <path d={areaPath} fill="url(#tytGrad)" />
-                    <polyline
-                      fill="none"
-                      stroke="#4f46e5"
-                      strokeWidth="3.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      points={pointsStr}
-                    />
-                    {tytPoints.map((item, i) => {
-                      const x = 50 + (i / Math.max(1, tytPoints.length - 1)) * 520;
-                      const y = 220 - (Math.min(100, (item.totalNet / maxNet) * 100) / 100) * 190;
-                      return (
-                        <g key={i}>
-                          <circle cx={x} cy={y} r="5" fill="#ffffff" stroke="#4f46e5" strokeWidth="3" />
-                          <text x={x} y={y - 10} textAnchor="middle" fill="#312e81" fontSize="11" fontWeight="bold">
-                            {item.totalNet.toFixed(1)}
-                          </text>
-                          <text x={x} y="235" textAnchor="middle" fill="#64748b" fontSize="9">
-                            {item.date ? item.date.slice(5) : ''}
-                          </text>
+                  // Benzersiz sıralı tarihler
+                  const uniqueDates = Array.from(new Set(activeExams.map(e => e.date))).sort();
+
+                  const getX = (dateStr) => {
+                    if (uniqueDates.length <= 1) return 310;
+                    const dateIdx = uniqueDates.indexOf(dateStr);
+                    return 55 + (dateIdx / (uniqueDates.length - 1)) * 530;
+                  };
+
+                  const getY = (net, maxQuestions = 120) => {
+                    const pct = Math.min(100, Math.max(0, (net / maxQuestions) * 100));
+                    return 210 - (pct / 100) * 175;
+                  };
+
+                  // TYT Noktaları
+                  const showTyt = chartView === 'ALL' || chartView === 'TYT';
+                  const tytList = chronologicalTyt;
+                  const tytCoords = tytList.map(e => ({
+                    exam: e,
+                    x: getX(e.date),
+                    y: getY(e.totalNet, 120)
+                  }));
+
+                  // AYT Noktaları
+                  const showAyt = chartView === 'ALL' || chartView === 'AYT';
+                  const aytList = chronologicalAyt;
+                  const aytCoords = aytList.map(e => ({
+                    exam: e,
+                    x: getX(e.date),
+                    y: getY(e.totalNet, 80)
+                  }));
+
+                  // SVG Polyline dizgeleri
+                  const tytPointsStr = tytCoords.map(p => `${p.x},${p.y}`).join(' ');
+                  const aytPointsStr = aytCoords.map(p => `${p.x},${p.y}`).join(' ');
+
+                  const tytArea = tytCoords.length > 0 
+                    ? `M ${tytCoords[0].x},210 L ${tytPointsStr} L ${tytCoords[tytCoords.length - 1].x},210 Z`
+                    : '';
+                  const aytArea = aytCoords.length > 0
+                    ? `M ${aytCoords[0].x},210 L ${aytPointsStr} L ${aytCoords[aytCoords.length - 1].x},210 Z`
+                    : '';
+
+                  return (
+                    <g>
+                      {/* Tarih Etiketleri (X Ekseni) */}
+                      {uniqueDates.map((d, idx) => {
+                        const x = getX(d);
+                        const parts = d.split('-');
+                        const formattedDate = `${parts[2]}/${parts[1]}`;
+                        return (
+                          <g key={idx}>
+                            <line x1={x} y1="210" x2={x} y2="216" stroke="#cbd5e1" strokeWidth="1.5" />
+                            <text x={x} y="232" textAnchor="middle" fill="#64748b" fontSize="10.5" fontWeight="600">
+                              {formattedDate}
+                            </text>
+                          </g>
+                        );
+                      })}
+
+                      {/* TYT Çizgisi ve Alanı */}
+                      {showTyt && tytCoords.length > 0 && (
+                        <g>
+                          {tytArea && <path d={tytArea} fill="url(#tytGradClean)" />}
+                          {tytCoords.length > 1 && (
+                            <polyline
+                              fill="none"
+                              stroke="#4f46e5"
+                              strokeWidth="3.5"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              points={tytPointsStr}
+                            />
+                          )}
+                          {tytCoords.map((pt, i) => {
+                            const isSelected = activeChartExam && activeChartExam.id === pt.exam.id;
+                            // Badge Y konumu (TYT üstte yer alır)
+                            const badgeY = pt.y - 26;
+                            const badgeW = 46;
+                            const badgeH = 19;
+
+                            return (
+                              <g 
+                                key={`tyt-${i}`} 
+                                className="cursor-pointer group"
+                                onClick={() => setActiveChartExam(pt.exam)}
+                              >
+                                {/* Dış Halka */}
+                                <circle 
+                                  cx={pt.x} 
+                                  cy={pt.y} 
+                                  r={isSelected ? 8 : 6} 
+                                  fill="#4f46e5" 
+                                  fillOpacity="0.2" 
+                                />
+                                {/* İç Nokta */}
+                                <circle 
+                                  cx={pt.x} 
+                                  cy={pt.y} 
+                                  r="4" 
+                                  fill="#ffffff" 
+                                  stroke="#4f46e5" 
+                                  strokeWidth="2.5" 
+                                />
+                                
+                                {/* Şık ve Temiz Rozet (Kaba yazım şekli kaldırıldı) */}
+                                <rect
+                                  x={pt.x - badgeW / 2}
+                                  y={badgeY}
+                                  width={badgeW}
+                                  height={badgeH}
+                                  rx="6"
+                                  fill="#4f46e5"
+                                  filter="url(#badgeShadow)"
+                                />
+                                <text
+                                  x={pt.x}
+                                  y={badgeY + 13}
+                                  textAnchor="middle"
+                                  fill="#ffffff"
+                                  fontSize="10"
+                                  fontWeight="800"
+                                  letterSpacing="0.2px"
+                                >
+                                  {pt.exam.totalNet.toFixed(1)}
+                                </text>
+                              </g>
+                            );
+                          })}
                         </g>
-                      );
-                    })}
-                  </g>
-                );
-              })()}
+                      )}
 
-              {/* AYT Çizgisi ve Alanı */}
-              {(() => {
-                const aytPoints = [...aytExams].reverse();
-                if (aytPoints.length === 0) return null;
-                const maxNet = 80;
-                const pointsStr = aytPoints.map((item, i) => {
-                  const x = 50 + (i / Math.max(1, aytPoints.length - 1)) * 520;
-                  const y = 220 - (Math.min(100, (item.totalNet / maxNet) * 100) / 100) * 190;
-                  return `${x},${y}`;
-                }).join(' ');
+                      {/* AYT Çizgisi ve Alanı */}
+                      {showAyt && aytCoords.length > 0 && (
+                        <g>
+                          {aytArea && <path d={aytArea} fill="url(#aytGradClean)" />}
+                          {aytCoords.length > 1 && (
+                            <polyline
+                              fill="none"
+                              stroke="#9333ea"
+                              strokeWidth="3.5"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeDasharray="3 0"
+                              points={aytPointsStr}
+                            />
+                          )}
+                          {aytCoords.map((pt, i) => {
+                            const isSelected = activeChartExam && activeChartExam.id === pt.exam.id;
+                            // AYT Rozet Y konumu: TYT ile çakışmaması için ALTA konumlandırılır
+                            const badgeY = pt.y + 9;
+                            const badgeW = 46;
+                            const badgeH = 19;
 
-                return (
-                  <g>
-                    <polyline
-                      fill="none"
-                      stroke="#9333ea"
-                      strokeWidth="3.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeDasharray="2 0"
-                      points={pointsStr}
-                    />
-                    {aytPoints.map((item, i) => {
-                      const x = 50 + (i / Math.max(1, aytPoints.length - 1)) * 520;
-                      const y = 220 - (Math.min(100, (item.totalNet / maxNet) * 100) / 100) * 190;
-                      return (
-                        <g key={i}>
-                          <circle cx={x} cy={y} r="5" fill="#ffffff" stroke="#9333ea" strokeWidth="3" />
-                          <text x={x} y={y - 10} textAnchor="middle" fill="#581c87" fontSize="11" fontWeight="bold">
-                            {item.totalNet.toFixed(1)}
-                          </text>
+                            return (
+                              <g 
+                                key={`ayt-${i}`} 
+                                className="cursor-pointer group"
+                                onClick={() => setActiveChartExam(pt.exam)}
+                              >
+                                <circle 
+                                  cx={pt.x} 
+                                  cy={pt.y} 
+                                  r={isSelected ? 8 : 6} 
+                                  fill="#9333ea" 
+                                  fillOpacity="0.2" 
+                                />
+                                <circle 
+                                  cx={pt.x} 
+                                  cy={pt.y} 
+                                  r="4" 
+                                  fill="#ffffff" 
+                                  stroke="#9333ea" 
+                                  strokeWidth="2.5" 
+                                />
+
+                                {/* AYT Şık Rozet */}
+                                <rect
+                                  x={pt.x - badgeW / 2}
+                                  y={badgeY}
+                                  width={badgeW}
+                                  height={badgeH}
+                                  rx="6"
+                                  fill="#9333ea"
+                                  filter="url(#badgeShadow)"
+                                />
+                                <text
+                                  x={pt.x}
+                                  y={badgeY + 13}
+                                  textAnchor="middle"
+                                  fill="#ffffff"
+                                  fontSize="10"
+                                  fontWeight="800"
+                                  letterSpacing="0.2px"
+                                >
+                                  {pt.exam.totalNet.toFixed(1)}
+                                </text>
+                              </g>
+                            );
+                          })}
                         </g>
-                      );
-                    })}
-                  </g>
-                );
-              })()}
+                      )}
 
-            </svg>
+                    </g>
+                  );
+                })()}
+
+              </svg>
+            </div>
+
+            {/* Seçilen Deneme Detay Kartı (Tıklanınca Açılır) */}
+            {activeChartExam && (
+              <div className="mt-4 p-3.5 bg-slate-50 border border-indigo-100 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-3 animate-in fade-in duration-150">
+                <div className="flex items-center gap-3">
+                  <div className={`w-9 h-9 rounded-xl flex items-center justify-center font-black text-xs ${activeChartExam.stage === 'TYT' ? 'bg-indigo-600 text-white' : 'bg-purple-600 text-white'}`}>
+                    {activeChartExam.stage}
+                  </div>
+                  <div>
+                    <h4 className="text-xs sm:text-sm font-extrabold text-slate-900">
+                      {activeChartExam.title}
+                    </h4>
+                    <p className="text-[11px] text-slate-500">
+                      Tarih: {activeChartExam.date} • {activeChartExam.institution || 'Deneme Sınavı'}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-4 text-xs">
+                  <div className="text-center">
+                    <span className="text-[10px] text-slate-400 block font-semibold">Toplam Net</span>
+                    <span className="text-sm font-black text-slate-900">{activeChartExam.totalNet.toFixed(2)}</span>
+                  </div>
+                  <div className="text-center">
+                    <span className="text-[10px] text-slate-400 block font-semibold">Doğru / Yanlış</span>
+                    <span className="text-xs font-bold text-slate-700">{activeChartExam.totalCorrect} D / {activeChartExam.totalWrong} Y</span>
+                  </div>
+                  <div className="text-center">
+                    <span className="text-[10px] text-slate-400 block font-semibold">Başarı</span>
+                    <span className="text-xs font-black text-indigo-600">%{activeChartExam.successPercentage || 0}</span>
+                  </div>
+                  <button
+                    onClick={() => setActiveChartExam(null)}
+                    className="text-slate-400 hover:text-slate-600 p-1 rounded-lg"
+                  >
+                    ✕
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         ) : (
           <div className="py-12 text-center text-slate-400">
