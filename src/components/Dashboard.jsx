@@ -14,6 +14,8 @@ import {
   calculateIndividualExamScore 
 } from '../services/yksScoreCalculator';
 import { YOK_ATLAS_PROGRAMS } from '../data/yokAtlasData';
+import { getProgramMultiYearData, evaluateProgramSafety } from '../services/yokAtlasAnalysis';
+import MultiYearRankPopover from './MultiYearRankPopover';
 
 export default function Dashboard({ 
   exams, 
@@ -29,8 +31,9 @@ export default function Dashboard({
   const [activeChartExam, setActiveChartExam] = useState(null);
   const [examReportModal, setExamReportModal] = useState(null);
   const [pairedExamId, setPairedExamId] = useState('AVERAGE'); // 'AVERAGE' or specific exam ID
-  const [modalActiveTab, setModalActiveTab] = useState('ELIGIBLE'); // 'ELIGIBLE' or 'ALL'
+  const [modalActiveTab, setModalActiveTab] = useState('ELIGIBLE'); // 'ELIGIBLE', 'TREND_RISK', 'ALL'
   const [modalSearchQuery, setModalSearchQuery] = useState('');
+  const [reportScenario, setReportScenario] = useState('WEIGHTED_AVG'); // 'WEIGHTED_AVG', 'LATEST_2025', 'PEAK_SAFE'
 
   // Öğrenci Ayarları (Diploma Notu)
   const settings = StorageService.getSettings();
@@ -124,35 +127,10 @@ export default function Dashboard({
 
     const userRank = perf.ranking.midRank;
 
-    // Tüm YÖK Atlas programlarını sıralama ve puana göre sınıflandır
+    // Tüm YÖK Atlas programlarını çok yıllı gerçekçi modele göre değerlendir (2025, 2024, 2023)
     const allMapped = YOK_ATLAS_PROGRAMS.map(prog => {
-      let status = 'HEDEF';
-      let statusLabel = 'Hedef Bandında';
-      let statusColor = 'indigo';
-
-      if (userRank <= prog.rank * 0.90) {
-        status = 'GARANTI';
-        statusLabel = 'Rahat Girer';
-        statusColor = 'emerald';
-      } else if (userRank <= prog.rank * 1.18) {
-        status = 'HEDEF';
-        statusLabel = 'Hedef Bandı';
-        statusColor = 'indigo';
-      } else {
-        status = 'GAYRET';
-        statusLabel = 'Daha Fazla Net Lazım';
-        statusColor = 'rose';
-      }
-
-      const diff = userRank - prog.rank;
-      return {
-        ...prog,
-        status,
-        statusLabel,
-        statusColor,
-        rankDiff: diff
-      };
-    }).sort((a, b) => a.rank - b.rank);
+      return evaluateProgramSafety(prog, userRank, reportScenario);
+    }).sort((a, b) => (a.effectiveRank || a.rank) - (b.effectiveRank || b.rank));
 
     // Arama filtrelemesi
     const query = modalSearchQuery.trim().toLowerCase();
@@ -169,11 +147,12 @@ export default function Dashboard({
     let eligibleList = searchFiltered.filter(p => p.status === 'GARANTI' || p.status === 'HEDEF');
     // Eğer filtre araması yoksa ve hiçbir bölüm eşleşmemişse, öğrencinin sıralamasına en yakın bölümleri göster
     if (eligibleList.length === 0 && !query) {
-      eligibleList = [...allMapped].sort((a, b) => Math.abs(a.rank - userRank) - Math.abs(b.rank - userRank)).slice(0, 10);
+      eligibleList = [...allMapped].sort((a, b) => Math.abs((a.effectiveRank || a.rank) - userRank) - Math.abs((b.effectiveRank || b.rank) - userRank)).slice(0, 10);
     }
 
     const guaranteed = searchFiltered.filter(p => p.status === 'GARANTI');
     const targets = searchFiltered.filter(p => p.status === 'HEDEF');
+    const trendRisks = searchFiltered.filter(p => p.status === 'TREND_RISK');
     const reach = searchFiltered.filter(p => p.status === 'GAYRET');
 
     return {
@@ -185,10 +164,11 @@ export default function Dashboard({
       eligibleList,
       guaranteed,
       targets,
+      trendRisks,
       reach,
       pairedLabel: perf.pairedLabel
     };
-  }, [examReportModal, exams, settings.diplomaGrade, settings.isObpBroken, pairedExamId, modalSearchQuery]);
+  }, [examReportModal, exams, settings.diplomaGrade, settings.isObpBroken, pairedExamId, modalSearchQuery, reportScenario]);
 
   // Filtrelenmiş denemeler
   const filteredExams = exams.filter(e => {
@@ -434,9 +414,24 @@ export default function Dashboard({
           <div className="text-xs text-amber-800 font-medium truncate mt-0.5">
             {targetProgram ? targetProgram.department : 'YÖK Atlas sekmesinden seç'}
           </div>
-          <div className="mt-2 text-[11px] text-amber-900 font-semibold flex items-center gap-1 pt-2 border-t border-amber-200/60">
-            <span>YÖK Atlas Net Analizi</span>
-            <ChevronRight className="w-3.5 h-3.5" />
+          <div className="mt-2 text-[11px] text-amber-900 font-semibold flex items-center justify-between gap-1 pt-2 border-t border-amber-200/60">
+            {targetProgram ? (
+              <>
+                <span className="inline-flex items-center gap-1 font-mono">
+                  <span className="font-sans">2025:</span>
+                  <b>#{targetProgram.rank.toLocaleString()}</b>
+                  <MultiYearRankPopover program={targetProgram} align="right" />
+                </span>
+                <span className="text-xs font-bold text-amber-700 flex items-center gap-0.5">
+                  Analiz <ChevronRight className="w-3.5 h-3.5" />
+                </span>
+              </>
+            ) : (
+              <>
+                <span>YÖK Atlas Net Analizi</span>
+                <ChevronRight className="w-3.5 h-3.5" />
+              </>
+            )}
           </div>
         </div>
 
@@ -1348,17 +1343,58 @@ export default function Dashboard({
                 </div>
               </div>
 
-              {/* 4. KISIM: YÖK ATLAS LİSANS PROGRAMLARI (KAZANABİLECEĞİ + BÜTÜN BÖLÜMLER) */}
-              <div className="space-y-3">
+              {/* 4. KISIM: YÖK ATLAS LİSANS PROGRAMLARI (ÇOK YILLI GERÇEKÇİ ANALİZ) */}
+              <div className="space-y-3.5">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                   <div>
                     <h4 className="text-xs sm:text-sm font-black uppercase tracking-wider text-slate-900 flex items-center gap-1.5">
                       <GraduationCap className="w-5 h-5 text-indigo-600" />
-                      YÖK Atlas Lisans Programları ({examReportData.totalDatabaseCount} Program)
+                      YÖK Atlas Çok Yıllı Tercih Analizi ({examReportData.totalDatabaseCount} Program)
                     </h4>
                     <p className="text-[11px] text-slate-500 font-medium">
                       Bu sınav doğrultusunda tahmini <b>#{examReportData.userRank.toLocaleString()}</b> sıralamanıza göre üniversiteler listelenmiştir.
                     </p>
+                  </div>
+                </div>
+
+                {/* Çok Yıllı Gerçekçi Değerlendirme Senaryosu Seçimi */}
+                <div className="bg-slate-50 p-3 rounded-2xl border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+                  <div className="flex items-center gap-2">
+                    <Sparkles className="w-4 h-4 text-indigo-600 flex-shrink-0" />
+                    <span className="text-xs font-bold text-slate-800">
+                      Rehberlik Senaryosu:
+                    </span>
+                  </div>
+                  <div className="flex items-center bg-white p-1 rounded-xl border border-slate-200 text-xs font-bold shadow-sm flex-wrap">
+                    <button
+                      onClick={() => setReportScenario('WEIGHTED_AVG')}
+                      className={`px-3 py-1.5 rounded-lg transition ${reportScenario === 'WEIGHTED_AVG' ? 'bg-indigo-600 text-white shadow-sm' : 'text-slate-600 hover:text-slate-900'}`}
+                      title="Son 3 yılın ağırlıklı ortalaması (En Güvenilir & Gerçekçi Öneri)"
+                    >
+                      🌟 3 Yıllık Ortalama (En Gerçekçi)
+                    </button>
+                    <button
+                      onClick={() => setReportScenario('LATEST_2025')}
+                      className={`px-3 py-1.5 rounded-lg transition ${reportScenario === 'LATEST_2025' ? 'bg-indigo-600 text-white shadow-sm' : 'text-slate-600 hover:text-slate-900'}`}
+                      title="Sadece en son açıklanan 2025 resmi taban sıralaması"
+                    >
+                      📌 Son Yıl (2025)
+                    </button>
+                    <button
+                      onClick={() => setReportScenario('PEAK_SAFE')}
+                      className={`px-3 py-1.5 rounded-lg transition ${reportScenario === 'PEAK_SAFE' ? 'bg-indigo-600 text-white shadow-sm' : 'text-slate-600 hover:text-slate-900'}`}
+                      title="Son 3 yılın en zor yılı (Açıkta kalmayı önleyen güvenli senaryo)"
+                    >
+                      🛡️ Güvenli / Kötümser
+                    </button>
+                  </div>
+                </div>
+
+                {/* Gerçekçi Tercih Bilgilendirme Notu */}
+                <div className="p-3 bg-indigo-50/70 border border-indigo-200/80 rounded-2xl text-[11px] text-indigo-950 flex items-start gap-2">
+                  <Info className="w-4 h-4 text-indigo-600 flex-shrink-0 mt-0.5" />
+                  <div className="leading-relaxed">
+                    <b>Gerçekçi Tercih Güvencesi:</b> Tek bir yıla (örn. yalnızca 2024'e) güvenmek, hızla yükselen popüler bölümlerde yanıltıcı olabilir. Programımız her bölümün <b>2025, 2024 ve 2023</b> sıralama trendini analiz eder. Sıralama yanındaki <b>(i)</b> butonuna tıklayarak resmi YÖK Atlas 3 yıllık verilerini inceleyebilirsiniz.
                   </div>
                 </div>
 
@@ -1369,7 +1405,7 @@ export default function Dashboard({
                     type="text"
                     value={modalSearchQuery}
                     onChange={(e) => setModalSearchQuery(e.target.value)}
-                    placeholder="Üniversite, bölüm veya şehir ara... (örn: Hukuk, YBS, Akdeniz, Marmara, Ankara)"
+                    placeholder="Üniversite, bölüm veya şehir ara... (örn: Hukuk, YBS, Boğaziçi, Marmara, Ankara)"
                     className="w-full pl-10 pr-9 py-2.5 rounded-2xl border border-slate-200 bg-slate-50 text-xs font-semibold text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition"
                   />
                   {modalSearchQuery && (
@@ -1382,8 +1418,8 @@ export default function Dashboard({
                   )}
                 </div>
 
-                {/* Sekmeler (Tabs): Kazanabileceği Bölümler vs Bütün Bölümler */}
-                <div className="flex items-center gap-2 border-b border-slate-200 pb-2">
+                {/* Sekmeler (Tabs): Kazanabileceği vs Trend Riski Olanlar vs Bütün Bölümler */}
+                <div className="flex items-center gap-2 border-b border-slate-200 pb-2 flex-wrap">
                   <button
                     onClick={() => setModalActiveTab('ELIGIBLE')}
                     className={`px-3 py-1.5 rounded-xl text-xs font-black transition flex items-center gap-1.5 ${
@@ -1397,6 +1433,22 @@ export default function Dashboard({
                       {examReportData.eligibleList.length}
                     </span>
                   </button>
+
+                  {examReportData.trendRisks.length > 0 && (
+                    <button
+                      onClick={() => setModalActiveTab('TREND_RISK')}
+                      className={`px-3 py-1.5 rounded-xl text-xs font-black transition flex items-center gap-1.5 ${
+                        modalActiveTab === 'TREND_RISK'
+                          ? 'bg-amber-600 text-white shadow-sm'
+                          : 'bg-amber-50 text-amber-800 hover:bg-amber-100 border border-amber-200'
+                      }`}
+                    >
+                      ⚠️ Kritik / Trend Riski
+                      <span className={`text-[10px] px-1.5 py-0.2 rounded-full ${modalActiveTab === 'TREND_RISK' ? 'bg-amber-700 text-white' : 'bg-amber-200 text-amber-900'}`}>
+                        {examReportData.trendRisks.length}
+                      </span>
+                    </button>
+                  )}
 
                   <button
                     onClick={() => setModalActiveTab('ALL')}
@@ -1416,9 +1468,12 @@ export default function Dashboard({
                 {/* Program Listesi */}
                 <div className="space-y-2.5 max-h-[42vh] overflow-y-auto pr-1">
                   {(() => {
-                    const listToDisplay = modalActiveTab === 'ELIGIBLE' 
-                      ? examReportData.eligibleList 
-                      : examReportData.allMapped;
+                    let listToDisplay = examReportData.eligibleList;
+                    if (modalActiveTab === 'TREND_RISK') {
+                      listToDisplay = examReportData.trendRisks;
+                    } else if (modalActiveTab === 'ALL') {
+                      listToDisplay = examReportData.allMapped;
+                    }
 
                     if (listToDisplay.length === 0) {
                       return (
@@ -1441,6 +1496,7 @@ export default function Dashboard({
                     return listToDisplay.map((prog) => {
                       const isGuaranteed = prog.status === 'GARANTI';
                       const isTarget = prog.status === 'HEDEF';
+                      const isTrendRisk = prog.status === 'TREND_RISK';
                       const isReach = prog.status === 'GAYRET';
 
                       return (
@@ -1449,12 +1505,14 @@ export default function Dashboard({
                           className={`p-3.5 rounded-2xl border transition hover:shadow-md flex flex-col sm:flex-row sm:items-center justify-between gap-3 ${
                             isGuaranteed 
                               ? 'bg-emerald-50/50 border-emerald-200' 
-                              : isTarget 
-                                ? 'bg-indigo-50/60 border-indigo-200' 
-                                : 'bg-slate-50/70 border-slate-200'
+                              : isTrendRisk
+                                ? 'bg-amber-50/60 border-amber-300 ring-1 ring-amber-300/60'
+                                : isTarget 
+                                  ? 'bg-indigo-50/60 border-indigo-200' 
+                                  : 'bg-slate-50/70 border-slate-200'
                           }`}
                         >
-                          <div className="space-y-1">
+                          <div className="space-y-1.5 flex-1 min-w-0">
                             <div className="flex items-center gap-2 flex-wrap">
                               <span className="text-xs font-black text-slate-900">
                                 {prog.university}
@@ -1462,7 +1520,7 @@ export default function Dashboard({
                               <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-200/80 text-slate-700">
                                 {prog.city}
                               </span>
-                              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-600">
+                              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 font-mono">
                                 Kod: {prog.kilavuzKodu}
                               </span>
                             </div>
@@ -1474,15 +1532,38 @@ export default function Dashboard({
                               </span>
                             </div>
 
+                            {/* Çok Yıllı Sıralama ve Trend Göstergesi */}
                             <div className="flex items-center gap-2 text-[10px] text-slate-500 font-semibold flex-wrap">
-                              <span>2024 Taban Sıralama: <b className="text-slate-800">#{prog.rank.toLocaleString()}</b></span>
+                              <span className="inline-flex items-center gap-1.5 bg-white px-2 py-0.5 rounded-lg border border-slate-200 shadow-2xs">
+                                <span className="text-slate-600 font-bold">2025:</span>
+                                <b className="text-indigo-950 font-black">
+                                  #{prog.multi.rank2025 > 0 ? prog.multi.rank2025.toLocaleString() : '---'}
+                                </b>
+                                <MultiYearRankPopover program={prog} align="left" />
+                              </span>
+
+                              <span className={`px-2 py-0.5 rounded-lg font-bold text-[10px] border flex items-center gap-1 ${prog.multi.trend.badgeClass}`}>
+                                <span>{prog.multi.trend.icon}</span>
+                                <span>{prog.multi.trend.shortLabel || prog.multi.trend.label}</span>
+                              </span>
+
                               <span>•</span>
-                              <span>Taban Puan: <b className="text-slate-800">{prog.baseScore}</b></span>
+                              <span>3 Yıl Ort: <b className="text-slate-800">#{prog.multi.weightedAvgRank.toLocaleString()}</b></span>
                               <span>•</span>
-                              <span>Kontenjan: <b>{prog.quota}</b></span>
+                              <span>Taban: <b className="text-slate-800">{prog.baseScore}</b></span>
+                              <span>•</span>
+                              <span>Kont: <b>{prog.quota}</b></span>
                               <span>•</span>
                               <span>Tür: <b>{prog.scholarship}</b></span>
                             </div>
+
+                            {/* Trend Riski Uyarısı Varsa */}
+                            {prog.riskAlert && (
+                              <div className="mt-1 px-2.5 py-1 rounded-xl bg-amber-100/80 border border-amber-300 text-[10.5px] text-amber-950 font-bold flex items-center gap-1.5">
+                                <AlertCircle className="w-3.5 h-3.5 text-amber-700 flex-shrink-0" />
+                                <span>{prog.riskAlert.message}</span>
+                              </div>
+                            )}
                           </div>
 
                           {/* Sağ Durum Rozeti ve Aksiyon Butonu */}
@@ -1491,12 +1572,18 @@ export default function Dashboard({
                             {isGuaranteed && (
                               <span className="text-[11px] font-black px-2.5 py-1 rounded-xl bg-emerald-100 text-emerald-800 border border-emerald-200 flex items-center gap-1">
                                 <Check className="w-3.5 h-3.5 text-emerald-600" />
-                                Rahat Girer (+{Math.abs(prog.rankDiff).toLocaleString()} önde)
+                                Banko Tercih (+{Math.abs(prog.rankDiff).toLocaleString()} önde)
+                              </span>
+                            )}
+                            {isTrendRisk && (
+                              <span className="text-[11px] font-black px-2.5 py-1 rounded-xl bg-amber-100 text-amber-900 border border-amber-300 flex items-center gap-1">
+                                <AlertTriangle className="w-3.5 h-3.5 text-amber-600" />
+                                ⚠️ Trend Riski
                               </span>
                             )}
                             {isTarget && (
                               <span className="text-[11px] font-black px-2.5 py-1 rounded-xl bg-indigo-100 text-indigo-800 border border-indigo-200">
-                                🟡 Hedef Bandında
+                                🟡 İdeal Hedef Bandı
                               </span>
                             )}
                             {isReach && (
@@ -1543,7 +1630,7 @@ export default function Dashboard({
             {/* Modal Alt Kapatma Barı */}
             <div className="p-4 bg-slate-50 border-t border-slate-200 flex items-center justify-between gap-2">
               <span className="text-xs text-slate-500 font-semibold hidden sm:inline">
-                YÖK Atlas 2024 ve ÖSYM Türkiye Yığılma Verileri ile entegredir.
+                YÖK Atlas 2023-2025 Çok Yıllı Başarı Sıraları ve ÖSYM Yığılma Verileri ile entegredir.
               </span>
               <button
                 onClick={() => setExamReportModal(null)}

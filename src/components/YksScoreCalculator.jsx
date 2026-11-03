@@ -14,6 +14,7 @@ import {
 } from '../services/yksScoreCalculator';
 import { YOK_ATLAS_PROGRAMS } from '../data/yokAtlasData';
 import { StorageService } from '../services/storage';
+import MultiYearRankPopover from './MultiYearRankPopover';
 
 export default function YksScoreCalculator({ 
   exams = [], 
@@ -642,9 +643,11 @@ export default function YksScoreCalculator({
                     <span className="text-[11px] text-indigo-800 font-semibold block">
                       {prog.department}
                     </span>
-                    <span className="text-[10px] text-slate-500">
-                      2024 Sıralama: #{prog.rank.toLocaleString()} • Taban Puan: {prog.baseScore}
-                    </span>
+                    <div className="text-[10px] text-slate-500 flex items-center gap-1.5 mt-0.5">
+                      <span className="font-bold text-slate-700">2025: #{prog.rank.toLocaleString()}</span>
+                      <MultiYearRankPopover program={prog} align="left" />
+                      <span>• Taban: {prog.baseScore}</span>
+                    </div>
                   </div>
 
                   <button
@@ -679,9 +682,11 @@ export default function YksScoreCalculator({
                       <span className="text-[11px] text-emerald-800 font-semibold block">
                         {prog.department}
                       </span>
-                      <span className="text-[10px] text-slate-500">
-                        2024 Sıralama: #{prog.rank.toLocaleString()} • Taban: {prog.baseScore}
-                      </span>
+                      <div className="text-[10px] text-slate-500 flex items-center gap-1.5 mt-0.5">
+                        <span className="font-bold text-slate-700">2025: #{prog.rank.toLocaleString()}</span>
+                        <MultiYearRankPopover program={prog} align="left" />
+                        <span>• Taban: {prog.baseScore}</span>
+                      </div>
                     </div>
 
                     <button

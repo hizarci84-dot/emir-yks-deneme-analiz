@@ -6,6 +6,8 @@ import {
   Layers, Check, Eye, X, ChevronLeft, Info, Copy
 } from 'lucide-react';
 import { YOK_ATLAS_PROGRAMS } from '../data/yokAtlasData';
+import MultiYearRankPopover from './MultiYearRankPopover';
+import { getProgramMultiYearData } from '../services/yokAtlasAnalysis';
 
 export default function YokAtlasTracker({ 
   exams, 
@@ -49,6 +51,7 @@ export default function YokAtlasTracker({
 
   // Mevcut hedef program
   const currentTarget = YOK_ATLAS_PROGRAMS.find(p => p.id === targetProgramId) || YOK_ATLAS_PROGRAMS[0];
+  const currentTargetMulti = useMemo(() => getProgramMultiYearData(currentTarget), [currentTarget]);
 
   // Emir'in deneme ortalamaları (1. Aşama ve 2. Aşama ayrı)
   const tytExams = exams.filter(e => e.stage === 'TYT');
@@ -263,17 +266,26 @@ export default function YokAtlasTracker({
 
           {/* Hedef Metrikleri & Butonlar */}
           <div className="flex flex-wrap sm:flex-nowrap items-center gap-3">
-            <div className="bg-white/10 backdrop-blur-md rounded-2xl p-3.5 border border-white/10 text-center min-w-[100px]">
-              <span className="text-[10px] text-indigo-300 block font-bold uppercase">2024 Sıralama</span>
-              <span className="text-lg sm:text-xl font-black text-amber-300">
+            <div className="bg-white/10 backdrop-blur-md rounded-2xl p-3.5 border border-white/10 text-center min-w-[130px]">
+              <div className="flex items-center justify-center gap-1.5 mb-0.5">
+                <span className="text-[10px] text-indigo-300 font-bold uppercase">Başarı Sırası</span>
+                <MultiYearRankPopover program={currentTarget} align="right" />
+              </div>
+              <span className="text-lg sm:text-xl font-black text-amber-300 block">
                 #{currentTarget.rank.toLocaleString()}
+              </span>
+              <span className="text-[10px] text-slate-300 font-medium block">
+                2025: #{currentTargetMulti.rank2025.toLocaleString()} • 2024: #{currentTargetMulti.rank2024.toLocaleString()}
               </span>
             </div>
 
-            <div className="bg-white/10 backdrop-blur-md rounded-2xl p-3.5 border border-white/10 text-center min-w-[100px]">
+            <div className="bg-white/10 backdrop-blur-md rounded-2xl p-3.5 border border-white/10 text-center min-w-[110px]">
               <span className="text-[10px] text-indigo-300 block font-bold uppercase">Taban Puan</span>
               <span className="text-lg sm:text-xl font-black text-white">
                 {currentTarget.baseScore > 0 ? currentTarget.baseScore : '---'}
+              </span>
+              <span className="text-[10px] text-indigo-200/90 block font-medium">
+                {currentTargetMulti.trend.icon} {currentTargetMulti.trend.shortLabel}
               </span>
             </div>
 
@@ -656,14 +668,20 @@ export default function YokAtlasTracker({
                     {/* Başarı Sırası */}
                     <td className="py-3 px-3 text-center">
                       {viewMode === 'OZET' ? (
-                        <span className="text-xs sm:text-sm font-black text-indigo-700">
-                          #{prog.rank > 0 ? prog.rank.toLocaleString() : '---'}
-                        </span>
-                      ) : (
-                        <div className="text-[11px] font-bold space-y-0.5">
-                          <span className="text-indigo-700 block">
+                        <div className="inline-flex items-center justify-center gap-1.5">
+                          <span className="text-xs sm:text-sm font-black text-indigo-700">
                             #{prog.rank > 0 ? prog.rank.toLocaleString() : '---'}
                           </span>
+                          <MultiYearRankPopover program={prog} align="center" />
+                        </div>
+                      ) : (
+                        <div className="text-[11px] font-bold space-y-0.5">
+                          <div className="inline-flex items-center justify-center gap-1">
+                            <span className="text-indigo-700 font-black">
+                              #{prog.rank > 0 ? prog.rank.toLocaleString() : '---'}
+                            </span>
+                            <MultiYearRankPopover program={prog} align="center" />
+                          </div>
                           <span className="text-slate-400 block text-[10px]">
                             {prog.rank1 ? '#' + prog.rank1.toLocaleString() : '-'} | {prog.rank2 ? '#' + prog.rank2.toLocaleString() : '-'}
                           </span>
@@ -706,8 +724,9 @@ export default function YokAtlasTracker({
                   <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-white/10 text-indigo-200 border border-white/10">
                     ÖSYM Kodu: {inspectProgram.kilavuzKodu}
                   </span>
-                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-400/20 text-amber-300">
-                    Sıralama: #{inspectProgram.rank.toLocaleString()}
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-400/20 text-amber-300 inline-flex items-center gap-1">
+                    <span>Sıralama: #{inspectProgram.rank.toLocaleString()}</span>
+                    <MultiYearRankPopover program={inspectProgram} align="left" />
                   </span>
                 </div>
                 <h3 className="text-base sm:text-lg font-black mt-1">
