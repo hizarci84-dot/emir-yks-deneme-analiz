@@ -1,96 +1,102 @@
 // Emir YKS EA - Yerel Depolama ve Bulut Senkronizasyon Servisi
 
-const STORAGE_KEY_EXAMS = 'emir_yks_exams_v1';
+const STORAGE_KEY_EXAMS = 'emir_yks_exams_v2';
 const STORAGE_KEY_TARGET = 'emir_yks_target_v1';
-const STORAGE_KEY_SETTINGS = 'emir_yks_settings_v1';
+const STORAGE_KEY_SETTINGS = 'emir_yks_settings_v2';
 
-// 11. Sınıf Maarif Modeli Başlangıç Örnek Denemeleri
-export const INITIAL_SAMPLE_EXAMS = [
+// Öğrenci Emir Uysal - Delta Kurs Resmi Sınav Sonuç Karneleri (Karne 1 & Karne 2)
+export const EMIR_REAL_EXAMS = [
   {
-    id: 'exam-1',
-    title: 'Özdebir 11. Sınıf Güz Denemesi (1. Aşama TYT)',
-    date: '2026-10-05',
+    id: 'emir-exam-2',
+    title: 'MAARİF ORİJİNAL TYT',
+    date: '2026-10-18',
     stage: 'TYT',
-    institution: 'Özdebir Yayınları',
+    institution: 'Delta Kurs',
+    examCode: '1104',
+    bookletType: 'A',
+    studentNo: '1086',
+    studentClass: '1103',
+    institutionScore: 326.430,
+    institutionAverage: 324.360,
+    percentile: '%50,00',
+    institutionRank: '25 / 50',
+    classRank: '3 / 11',
+    osymEstimatedRank: '275.559',
     difficulty: 'Orta',
-    notes: 'Dönemin ilk genel denemesi. Matematik problemlerinde zaman yönetimine dikkat edilmeli.',
+    notes: '18 Ekim 2026 Maarif Orijinal TYT Denemesi (Karne 1). Müthiş bir sıçrama: Net 39.75 ten 59.50 ye (+19.75 net artış!), TYT puanı 266.48 den 326.43 e yükseldi. Matematik 9 dan 18.5 nete çıkarak sınıf 1.si oldu. Sosyal Bilimler 17 doğru 0 yanlış ile harika sonuçlandı. Fen Bilimleri 8.25 net (Biyoloji 5 net ile sınıf 1.si).',
     subjects: {
-      tyt_turkce: { questionCount: 40, correct: 28, wrong: 8, blank: 4, net: 26.0 },
-      tyt_matematik: { questionCount: 40, correct: 22, wrong: 6, blank: 12, net: 20.5 },
-      tyt_sosyal: { questionCount: 20, correct: 14, wrong: 4, blank: 2, net: 13.0 },
-      tyt_fen: { questionCount: 20, correct: 6, wrong: 4, blank: 10, net: 5.0 }
+      tyt_turkce: { questionCount: 40, correct: 18, wrong: 9, blank: 13, net: 15.75 },
+      tyt_matematik: { questionCount: 40, correct: 19, wrong: 2, blank: 19, net: 18.50 },
+      tyt_sosyal: { questionCount: 20, correct: 17, wrong: 0, blank: 3, net: 17.00 },
+      tyt_fen: { questionCount: 20, correct: 9, wrong: 3, blank: 8, net: 8.25 }
+    },
+    subBranches: {
+      sosyal: [
+        { name: 'Tarih', questionCount: 5, correct: 5, wrong: 0, blank: 0, net: 5.00, rank: '1' },
+        { name: 'Coğrafya', questionCount: 5, correct: 3, wrong: 0, blank: 2, net: 3.00, rank: '19' },
+        { name: 'Felsefe', questionCount: 5, correct: 4, wrong: 0, blank: 1, net: 4.00, rank: '8' },
+        { name: 'Din Kültürü', questionCount: 5, correct: 5, wrong: 0, blank: 0, net: 5.00, rank: '1' }
+      ],
+      fen: [
+        { name: 'Fizik', questionCount: 7, correct: 3, wrong: 1, blank: 3, net: 2.75, rank: '36' },
+        { name: 'Kimya', questionCount: 7, correct: 1, wrong: 2, blank: 4, net: 0.50, rank: '25' },
+        { name: 'Biyoloji', questionCount: 6, correct: 5, wrong: 0, blank: 1, net: 5.00, rank: '3' }
+      ]
     },
     totalQuestions: 120,
-    totalCorrect: 70,
-    totalWrong: 22,
-    totalBlank: 28,
-    totalNet: 64.5,
-    successPercentage: 53.75
+    totalCorrect: 63,
+    totalWrong: 14,
+    totalBlank: 43,
+    totalNet: 59.50,
+    successPercentage: 49.58
   },
   {
-    id: 'exam-2',
-    title: '3D Yayınları 11. Sınıf EA Alan Denemesi (2. Aşama AYT)',
-    date: '2026-10-15',
-    stage: 'AYT',
-    institution: '3D Yayınları',
-    difficulty: 'Zor',
-    notes: 'Trigonometri ve Divan edebiyatı ağırlıklı. Matematikte analitik geometri iyi geçti.',
-    subjects: {
-      ayt_matematik: { questionCount: 40, correct: 21, wrong: 5, blank: 14, net: 19.75 },
-      ayt_edebiyat: { questionCount: 24, correct: 17, wrong: 4, blank: 3, net: 16.0 },
-      ayt_tarih1: { questionCount: 10, correct: 7, wrong: 2, blank: 1, net: 6.5 },
-      ayt_cografya1: { questionCount: 6, correct: 4, wrong: 1, blank: 1, net: 3.75 }
-    },
-    totalQuestions: 80,
-    totalCorrect: 49,
-    totalWrong: 12,
-    totalBlank: 19,
-    totalNet: 46.0,
-    successPercentage: 57.5
-  },
-  {
-    id: 'exam-3',
-    title: 'Okul Özel Tarama Sınavı (Farklı Soru Sayısı Örneği)',
-    date: '2026-10-22',
+    id: 'emir-exam-1',
+    title: 'ÇAP-MAARİF TYT',
+    date: '2026-09-04',
     stage: 'TYT',
-    institution: 'Okul / Dershane Denemesi',
+    institution: 'Delta Kurs',
+    examCode: '1103',
+    bookletType: 'B',
+    studentNo: '1086',
+    studentClass: '1103',
+    institutionScore: 266.480,
+    institutionAverage: 269.717,
+    percentile: '%52,63',
+    institutionRank: '10 / 19',
+    classRank: '1 / 5',
+    osymEstimatedRank: '719.156',
     difficulty: 'Orta',
-    notes: 'Okulda 11. sınıf için yapılan 80 soruluk özel deneme (Türkçe 30, Mat 30, Sosyal 10, Fen 10).',
+    notes: '4 Eylül 2026 Çap-Maarif Sezon Başı TYT Denemesi (Karne 2). Türkçe 20.75 net ile sınıf 1.si oldu. Sosyal Bilimler 10 net, Matematik 9 net. Fen testine zaman ayrılmadı (0 net). Toplam 39.75 Net.',
     subjects: {
-      tyt_turkce: { questionCount: 30, correct: 24, wrong: 4, blank: 2, net: 23.0 },
-      tyt_matematik: { questionCount: 30, correct: 20, wrong: 3, blank: 7, net: 19.25 },
-      tyt_sosyal: { questionCount: 10, correct: 8, wrong: 1, blank: 1, net: 7.75 },
-      tyt_fen: { questionCount: 10, correct: 4, wrong: 2, blank: 4, net: 3.5 }
+      tyt_turkce: { questionCount: 40, correct: 23, wrong: 9, blank: 8, net: 20.75 },
+      tyt_matematik: { questionCount: 40, correct: 11, wrong: 8, blank: 21, net: 9.00 },
+      tyt_sosyal: { questionCount: 20, correct: 11, wrong: 4, blank: 5, net: 10.00 },
+      tyt_fen: { questionCount: 20, correct: 0, wrong: 0, blank: 20, net: 0.00 }
     },
-    totalQuestions: 80,
-    totalCorrect: 56,
-    totalWrong: 10,
-    totalBlank: 14,
-    totalNet: 53.5,
-    successPercentage: 66.88
-  },
-  {
-    id: 'exam-4',
-    title: 'Bilgi Sarmal 1. Aşama TYT Genel Deneme-2',
-    date: '2026-10-28',
-    stage: 'TYT',
-    institution: 'Bilgi Sarmal',
-    difficulty: 'Orta',
-    notes: 'Türkçe paragrafta net artışı var. Matematik yeni nesil problem modellemelerinde gelişme sağlandı.',
-    subjects: {
-      tyt_turkce: { questionCount: 40, correct: 31, wrong: 5, blank: 4, net: 29.75 },
-      tyt_matematik: { questionCount: 40, correct: 25, wrong: 4, blank: 11, net: 24.0 },
-      tyt_sosyal: { questionCount: 20, correct: 15, wrong: 3, blank: 2, net: 14.25 },
-      tyt_fen: { questionCount: 20, correct: 7, wrong: 3, blank: 10, net: 6.25 }
+    subBranches: {
+      sosyal: [
+        { name: 'Tarih', questionCount: 5, correct: 4, wrong: 1, blank: 0, net: 3.75, rank: '6' },
+        { name: 'Coğrafya', questionCount: 5, correct: 0, wrong: 1, blank: 4, net: -0.25, rank: '16' },
+        { name: 'Felsefe', questionCount: 5, correct: 4, wrong: 0, blank: 1, net: 4.00, rank: '11' },
+        { name: 'Din Kültürü', questionCount: 5, correct: 3, wrong: 2, blank: 0, net: 2.50, rank: '16' }
+      ],
+      fen: [
+        { name: 'Fizik', questionCount: 7, correct: 0, wrong: 0, blank: 7, net: 0.00, rank: '15' },
+        { name: 'Kimya', questionCount: 7, correct: 0, wrong: 0, blank: 7, net: 0.00, rank: '14' },
+        { name: 'Biyoloji', questionCount: 6, correct: 0, wrong: 0, blank: 6, net: 0.00, rank: '14' }
+      ]
     },
     totalQuestions: 120,
-    totalCorrect: 78,
-    totalWrong: 15,
-    totalBlank: 27,
-    totalNet: 74.25,
-    successPercentage: 61.88
+    totalCorrect: 45,
+    totalWrong: 21,
+    totalBlank: 54,
+    totalNet: 39.75,
+    successPercentage: 33.13
   }
 ];
+
+export const INITIAL_SAMPLE_EXAMS = EMIR_REAL_EXAMS;
 
 export const StorageService = {
   // Denemeleri Getir
@@ -98,13 +104,20 @@ export const StorageService = {
     try {
       const data = localStorage.getItem(STORAGE_KEY_EXAMS);
       if (!data) {
-        localStorage.setItem(STORAGE_KEY_EXAMS, JSON.stringify(INITIAL_SAMPLE_EXAMS));
-        return INITIAL_SAMPLE_EXAMS;
+        localStorage.setItem(STORAGE_KEY_EXAMS, JSON.stringify(EMIR_REAL_EXAMS));
+        return EMIR_REAL_EXAMS;
       }
-      return JSON.parse(data);
+      const parsed = JSON.parse(data);
+      // Eski örnek deneme kalıntıları varsa temizle
+      const hasMock = parsed.some(e => ['exam-1', 'exam-2', 'exam-3', 'exam-4'].includes(e.id) || (e.title && (e.title.includes('Özdebir') || e.title.includes('3D Yayınları'))));
+      if (hasMock || parsed.length === 0) {
+        localStorage.setItem(STORAGE_KEY_EXAMS, JSON.stringify(EMIR_REAL_EXAMS));
+        return EMIR_REAL_EXAMS;
+      }
+      return parsed;
     } catch (e) {
       console.error('LocalStorage okuma hatası:', e);
-      return INITIAL_SAMPLE_EXAMS;
+      return EMIR_REAL_EXAMS;
     }
   },
 
@@ -176,7 +189,10 @@ export const StorageService = {
     try {
       const data = localStorage.getItem(STORAGE_KEY_SETTINGS);
       return data ? JSON.parse(data) : {
-        studentName: 'Emir',
+        studentName: 'Emir Uysal',
+        studentNo: '1086',
+        class: '1103 (11. Sınıf)',
+        institution: 'Delta Kurs',
         grade: '11. Sınıf',
         track: 'Eşit Ağırlık (EA)',
         targetYear: 2028,
@@ -188,7 +204,10 @@ export const StorageService = {
       };
     } catch {
       return {
-        studentName: 'Emir',
+        studentName: 'Emir Uysal',
+        studentNo: '1086',
+        class: '1103 (11. Sınıf)',
+        institution: 'Delta Kurs',
         grade: '11. Sınıf',
         track: 'Eşit Ağırlık (EA)',
         targetYear: 2028,

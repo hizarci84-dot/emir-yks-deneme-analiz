@@ -41,12 +41,18 @@ export default function Dashboard({
   // Deneme Ortalamalarından YKS EA Puanı ve Sıralama Tahmini
   const calculatedYksStats = useMemo(() => {
     const extracted = extractNetsFromExams(exams, 'AVERAGE');
-    const eaResult = calculateEaScore(extracted.tyt, extracted.ayt, obpInfo.contribution);
+    const hasAyt = extracted.ayt.examCount > 0;
+    // Eğer öğrencinin henüz AYT denemesi yoksa, 11. Sınıf EA standart hedefi (40 Net: Mat 16, Ede 15, Tar 6, Coğ 3) simüle edilir
+    const effectiveAyt = hasAyt 
+      ? extracted.ayt 
+      : { aytMatematik: 16.0, aytEdebiyat: 15.0, aytTarih1: 6.0, aytCografya1: 3.0, examCount: 0 };
+    const eaResult = calculateEaScore(extracted.tyt, effectiveAyt, obpInfo.contribution);
     const ranking = estimateEaRanking(eaResult.placementScore);
     return {
       eaResult,
       ranking,
-      extracted
+      extracted,
+      isAytSimulated: !hasAyt
     };
   }, [exams, obpInfo]);
 
@@ -68,7 +74,23 @@ export default function Dashboard({
     let customPairedNets = null;
     let customPairedLabel = '';
 
-    if (pairedExamId !== 'AVERAGE') {
+    // Henüz AYT denemesi girilmemişse zengin hedef simülasyonları sun
+    if (isTyt && complementaryExams.length === 0) {
+      if (pairedExamId === 'SIM_50') {
+        customPairedNets = { aytMatematik: 22.0, aytEdebiyat: 18.0, aytTarih1: 6.5, aytCografya1: 3.5 };
+        customPairedLabel = '11. Sınıf İleri Hedef AYT Simülasyonu (50.0 Net)';
+      } else if (pairedExamId === 'SIM_30') {
+        customPairedNets = { aytMatematik: 12.0, aytEdebiyat: 11.0, aytTarih1: 4.5, aytCografya1: 2.5 };
+        customPairedLabel = '11. Sınıf Başlangıç Hedef AYT Simülasyonu (30.0 Net)';
+      } else if (pairedExamId === 'SIM_60') {
+        customPairedNets = { aytMatematik: 28.0, aytEdebiyat: 21.0, aytTarih1: 7.5, aytCografya1: 3.5 };
+        customPairedLabel = 'EA Zirve / İlk 5 Bin Hedef AYT Simülasyonu (60.0 Net)';
+      } else {
+        // AVERAGE varsayılanı (40.0 Net)
+        customPairedNets = { aytMatematik: 16.0, aytEdebiyat: 15.0, aytTarih1: 6.0, aytCografya1: 3.0 };
+        customPairedLabel = '11. Sınıf EA Standart Hedef AYT Simülasyonu (40.0 Net)';
+      }
+    } else if (pairedExamId !== 'AVERAGE') {
       const selectedPair = exams.find(e => e.id === pairedExamId);
       if (selectedPair) {
         if (isTyt) {
@@ -287,6 +309,11 @@ export default function Dashboard({
               <span className="text-[10px] text-slate-400 block">
                 Diploma: {obpInfo.diplomaGrade} (+{obpInfo.contribution} OBP)
               </span>
+              {calculatedYksStats.isAytSimulated && (
+                <span className="text-[9.5px] text-indigo-300 block mt-0.5">
+                  💡 11. Sınıf EA Hedefi (40 Net AYT) ile
+                </span>
+              )}
             </div>
 
             <button
@@ -343,15 +370,31 @@ export default function Dashboard({
             <span className="text-2xl sm:text-3xl font-black text-slate-900">
               {latestAyt ? latestAyt.totalNet.toFixed(1) : '-'}
             </span>
-            <span className="text-xs text-slate-400 font-semibold">Net (Son)</span>
+            <span className="text-xs text-slate-400 font-semibold">
+              {latestAyt ? 'Net (Son)' : 'Henüz Girilmedi'}
+            </span>
           </div>
           <div className="mt-2 text-xs flex items-center justify-between text-slate-500 font-medium pt-2 border-t border-slate-100">
-            <span>Ortalama: <b className="text-slate-800">{avgAytNet}</b></span>
-            {aytDiff !== null && (
-              <span className={`inline-flex items-center font-bold ${parseFloat(aytDiff) >= 0 ? 'text-emerald-600' : 'text-rose-600'}`}>
-                {parseFloat(aytDiff) >= 0 ? <ArrowUpRight className="w-3.5 h-3.5" /> : <ArrowDownRight className="w-3.5 h-3.5" />}
-                {aytDiff > 0 ? `+${aytDiff}` : aytDiff}
-              </span>
+            {latestAyt ? (
+              <>
+                <span>Ortalama: <b className="text-slate-800">{avgAytNet}</b></span>
+                {aytDiff !== null && (
+                  <span className={`inline-flex items-center font-bold ${parseFloat(aytDiff) >= 0 ? 'text-emerald-600' : 'text-rose-600'}`}>
+                    {parseFloat(aytDiff) >= 0 ? <ArrowUpRight className="w-3.5 h-3.5" /> : <ArrowDownRight className="w-3.5 h-3.5" />}
+                    {aytDiff > 0 ? `+${aytDiff}` : aytDiff}
+                  </span>
+                )}
+              </>
+            ) : (
+              <>
+                <span className="text-slate-400 font-medium">11. Sınıf Müfredatı</span>
+                <button
+                  onClick={onOpenAddModal}
+                  className="text-purple-600 font-bold hover:underline"
+                >
+                  + Deneme Ekle
+                </button>
+              </>
             )}
           </div>
         </div>
@@ -836,11 +879,21 @@ export default function Dashboard({
                           <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-600">
                             {exam.institution || 'Genel'}
                           </span>
+                          {exam.examCode && (
+                            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200">
+                              Kod: {exam.examCode} (Kitapçık: {exam.bookletType || 'A'})
+                            </span>
+                          )}
                           <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
                             exam.difficulty === 'Zor' || exam.difficulty === 'Çok Zor' ? 'bg-rose-50 text-rose-700' : 'bg-amber-50 text-amber-700'
                           }`}>
                             {exam.difficulty}
                           </span>
+                          {exam.institutionScore && (
+                            <span className="text-[10px] font-black px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200">
+                              Delta Karne: {exam.institutionScore.toFixed(3)} TYT • Sıra: {exam.institutionRank}
+                            </span>
+                          )}
                           
                           {/* Sınav Puanı ve Sıralama Rozeti */}
                           {(() => {
@@ -929,36 +982,115 @@ export default function Dashboard({
 
                   {/* Genişletilmiş Ders Dağılımı (Accordion) */}
                   {isExpanded && (
-                    <div className="p-4 sm:p-5 bg-slate-50 border-t border-slate-200 space-y-3 animate-in slide-in-from-top-2 duration-150">
-                      <h5 className="text-xs font-bold text-slate-700 uppercase tracking-wider">
-                        Ders Bazlı Soru Sayıları ve Sonuçlar
-                      </h5>
+                    <div className="p-4 sm:p-5 bg-slate-50 border-t border-slate-200 space-y-4 animate-in slide-in-from-top-2 duration-150">
+                      
+                      {/* Delta Eğitim Kurumları Resmi Karne Özeti */}
+                      {exam.institutionScore && (
+                        <div className="p-3.5 bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white rounded-2xl flex flex-wrap items-center justify-between gap-3 text-xs shadow-sm">
+                          <div className="flex items-center gap-2">
+                            <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                            <span className="font-black text-amber-300">Delta Eğitim Kurumları Karne Bilgisi:</span>
+                            <span className="text-slate-300">Sınav Kodu: <b>{exam.examCode}</b> (Kitapçık: {exam.bookletType || 'A'})</span>
+                          </div>
+                          <div className="flex items-center gap-3 text-[11px] font-bold flex-wrap">
+                            <span>Karne TYT: <b className="text-emerald-300">{exam.institutionScore.toFixed(3)}</b></span>
+                            <span>•</span>
+                            <span>Kurum Ort: <b>{exam.institutionAverage?.toFixed(3)}</b></span>
+                            <span>•</span>
+                            <span>Genel Sıra: <b className="text-amber-300">{exam.institutionRank}</b></span>
+                            <span>•</span>
+                            <span>Sınıf Sıra: <b className="text-amber-300">{exam.classRank}</b></span>
+                            <span>•</span>
+                            <span>ÖSYM 26 Sıra: <b className="text-indigo-300">#{exam.osymEstimatedRank}</b></span>
+                          </div>
+                        </div>
+                      )}
 
-                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
-                        {Object.entries(exam.subjects || {}).map(([key, sub]) => {
-                          const cleanName = key.replace('tyt_', '').replace('ayt_', '').toUpperCase();
-                          return (
-                            <div key={key} className="bg-white p-3 rounded-xl border border-slate-200">
-                              <span className="text-xs font-extrabold text-slate-800 block truncate">
-                                {cleanName}
-                              </span>
-                              <div className="mt-1 flex items-baseline justify-between">
-                                <span className="text-sm font-black text-indigo-600">
-                                  {sub.net.toFixed(2)} Net
+                      <div>
+                        <h5 className="text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
+                          Ders Bazlı Soru Sayıları ve Sonuçlar
+                        </h5>
+
+                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+                          {Object.entries(exam.subjects || {}).map(([key, sub]) => {
+                            const cleanName = key.replace('tyt_', '').replace('ayt_', '').toUpperCase();
+                            return (
+                              <div key={key} className="bg-white p-3 rounded-xl border border-slate-200">
+                                <span className="text-xs font-extrabold text-slate-800 block truncate">
+                                  {cleanName}
                                 </span>
-                                <span className="text-[10px] text-slate-400 font-medium">
-                                  {sub.questionCount} Soru
-                                </span>
+                                <div className="mt-1 flex items-baseline justify-between">
+                                  <span className="text-sm font-black text-indigo-600">
+                                    {sub.net.toFixed(2)} Net
+                                  </span>
+                                  <span className="text-[10px] text-slate-400 font-medium">
+                                    {sub.questionCount} Soru
+                                  </span>
+                                </div>
+                                <div className="mt-1 text-[10px] text-slate-500 font-semibold flex justify-between border-t border-slate-100 pt-1">
+                                  <span className="text-emerald-600">{sub.correct} D</span>
+                                  <span className="text-rose-600">{sub.wrong} Y</span>
+                                  <span className="text-amber-600">{sub.blank} B</span>
+                                </div>
                               </div>
-                              <div className="mt-1 text-[10px] text-slate-500 font-semibold flex justify-between border-t border-slate-100 pt-1">
-                                <span className="text-emerald-600">{sub.correct} D</span>
-                                <span className="text-rose-600">{sub.wrong} Y</span>
-                                <span className="text-amber-600">{sub.blank} B</span>
-                              </div>
-                            </div>
-                          );
-                        })}
+                            );
+                          })}
+                        </div>
                       </div>
+
+                      {/* Alt Branşlar (Sosyal Bilimler ve Fen Bilimleri Detayı) */}
+                      {exam.subBranches && (
+                        <div className="space-y-2 pt-1 border-t border-slate-200/60">
+                          <h6 className="text-[11px] font-black uppercase tracking-wider text-slate-700">
+                            Karne Alt Branş Dağılımı (Sosyal & Fen)
+                          </h6>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                            {exam.subBranches.sosyal && (
+                              <div className="p-3.5 rounded-2xl bg-orange-50/70 border border-orange-200/80">
+                                <div className="flex items-center justify-between mb-2">
+                                  <span className="text-xs font-black text-orange-950">Sosyal Bilimler Branşları</span>
+                                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-orange-200 text-orange-900">20 Soru</span>
+                                </div>
+                                <div className="grid grid-cols-2 gap-2 text-[11px]">
+                                  {exam.subBranches.sosyal.map((sub, i) => (
+                                    <div key={i} className="bg-white p-2.5 rounded-xl border border-orange-100 flex items-center justify-between shadow-2xs">
+                                      <div>
+                                        <span className="font-extrabold text-slate-800 block">{sub.name}</span>
+                                        <span className="text-[10px] text-slate-400">{sub.correct}D {sub.wrong}Y {sub.blank}B</span>
+                                      </div>
+                                      <div className="text-right">
+                                        <span className="font-black text-orange-700 block">{sub.net.toFixed(2)} Net</span>
+                                        {sub.rank && <span className="text-[9px] text-slate-400 font-bold">Sıra: {sub.rank}</span>}
+                                      </div>
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+
+                            {exam.subBranches.fen && (
+                              <div className="p-3.5 rounded-2xl bg-emerald-50/70 border border-emerald-200/80">
+                                <div className="flex items-center justify-between mb-2">
+                                  <span className="text-xs font-black text-emerald-950">Fen Bilimleri Branşları</span>
+                                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-200 text-emerald-900">20 Soru</span>
+                                </div>
+                                <div className="grid grid-cols-3 gap-2 text-[11px]">
+                                  {exam.subBranches.fen.map((sub, i) => (
+                                    <div key={i} className="bg-white p-2.5 rounded-xl border border-emerald-100 flex flex-col justify-between shadow-2xs">
+                                      <span className="font-extrabold text-slate-800 truncate">{sub.name}</span>
+                                      <span className="text-[10px] text-slate-400">{sub.correct}D {sub.wrong}Y {sub.blank}B</span>
+                                      <div className="mt-1.5 pt-1 border-t border-slate-100 flex items-baseline justify-between">
+                                        <span className="font-black text-emerald-700">{sub.net.toFixed(2)} Net</span>
+                                        {sub.rank && <span className="text-[9px] text-slate-400 font-bold">#{sub.rank}</span>}
+                                      </div>
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      )}
 
                       {exam.notes && (
                         <div className="mt-2 p-3 rounded-xl bg-indigo-50/70 border border-indigo-100 text-xs text-indigo-950 font-medium">
@@ -1125,15 +1257,39 @@ export default function Dashboard({
                       onChange={(e) => setPairedExamId(e.target.value)}
                       className="w-full text-xs font-bold text-slate-800 bg-slate-50 border border-slate-300 rounded-xl px-2.5 py-1.5 focus:outline-none focus:ring-2 focus:ring-purple-500 cursor-pointer"
                     >
-                      <option value="AVERAGE">
-                        📌 Emir'in {examReportModal.stage === 'TYT' ? 'AYT' : 'TYT'} Deneme Ortalaması ({examReportModal.stage === 'TYT' ? avgAytNet : avgTytNet} Net)
-                      </option>
-                      {examReportData.complementaryExams.map(ex => (
-                        <option key={ex.id} value={ex.id}>
-                          📝 {ex.title} ({ex.totalNet.toFixed(1)} Net - {ex.date})
-                        </option>
-                      ))}
+                      {examReportData.complementaryExams.length > 0 ? (
+                        <>
+                          <option value="AVERAGE">
+                            📌 Emir'in {examReportModal.stage === 'TYT' ? 'AYT' : 'TYT'} Deneme Ortalaması ({examReportModal.stage === 'TYT' ? avgAytNet : avgTytNet} Net)
+                          </option>
+                          {examReportData.complementaryExams.map(ex => (
+                            <option key={ex.id} value={ex.id}>
+                              📝 {ex.title} ({ex.totalNet.toFixed(1)} Net - {ex.date})
+                            </option>
+                          ))}
+                        </>
+                      ) : (
+                        <>
+                          <option value="AVERAGE">
+                            🎯 11. Sınıf EA Standart Hedefi (40.0 Net AYT)
+                          </option>
+                          <option value="SIM_50">
+                            🚀 11. Sınıf EA İleri Hedefi (50.0 Net AYT)
+                          </option>
+                          <option value="SIM_30">
+                            🌱 11. Sınıf EA Başlangıç Hedefi (30.0 Net AYT)
+                          </option>
+                          <option value="SIM_60">
+                            🏆 EA Zirve / İlk 5 Bin Hedefi (60.0 Net AYT)
+                          </option>
+                        </>
+                      )}
                     </select>
+                    {examReportData.complementaryExams.length === 0 && examReportModal.stage === 'TYT' && (
+                      <span className="text-[10px] text-purple-700 font-bold block mt-1">
+                        💡 Henüz girilmiş AYT denemesi olmadığı için 11. sınıf hedef projeksiyonu baz alınmaktadır.
+                      </span>
+                    )}
 
                     <div className="flex items-baseline justify-between mt-2 pt-2 border-t border-slate-100">
                       <span className="text-xs text-slate-500 font-semibold truncate">
