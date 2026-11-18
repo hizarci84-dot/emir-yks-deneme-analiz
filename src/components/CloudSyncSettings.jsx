@@ -39,19 +39,23 @@ export default function CloudSyncSettings({
     showToast('Profil ve bulut ayarları başarıyla kaydedildi! ✅');
   };
 
-  // Bulut Senkronizasyonu Tetikle
-  const handleTriggerSync = () => {
+  // Bulut Senkronizasyonu Tetikle (Gerçek Zamanlı Bulut Sunucusu Eşitlemesi)
+  const handleTriggerSync = async () => {
     setIsSyncing(true);
     setSyncStatus('Bulut sunucusuyla senkronize ediliyor...');
 
-    setTimeout(() => {
-      // LocalStorage verisini bulut oturumuna aktar
-      const currentExams = StorageService.getExams();
-      StorageService.saveExams(currentExams);
-      setIsSyncing(false);
-      setSyncStatus(`Son Eşitleme: ${new Date().toLocaleTimeString()} (Başarılı)`);
-      showToast('Bulut veritabanı başarıyla senkronize edildi! ☁️');
-    }, 900);
+    const pullRes = await StorageService.pullFromCloud();
+    const pushRes = await StorageService.pushToCloud();
+    if (onReloadExams) onReloadExams();
+
+    setIsSyncing(false);
+    if (pullRes?.success || pushRes?.success) {
+      setSyncStatus(`Son Eşitleme: ${new Date().toLocaleTimeString('tr-TR')} (Canlı Bulut Aktif)`);
+      showToast('Öğrenci & Öğretmen bulut veritabanı eş zamanlı olarak eşitlendi! ☁️✅');
+    } else {
+      setSyncStatus('Yerel depolama aktif (İnternet bağlantısını kontrol edin)');
+      showToast('Veriler yerel hafızaya kaydedildi.');
+    }
   };
 
   // JSON Yedek İndir

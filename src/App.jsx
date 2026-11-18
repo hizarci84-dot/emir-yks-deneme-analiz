@@ -25,7 +25,7 @@ export default function App() {
   const [deferredPrompt, setDeferredPrompt] = useState(null);
   const [showInstallBanner, setShowInstallBanner] = useState(false);
 
-  // Verileri Başlangıçta Yükle
+  // Verileri Başlangıçta Yükle ve Canlı Bulut Senkronizasyonunu Başlat
   useEffect(() => {
     const loadedExams = StorageService.getExams();
     const loadedTarget = StorageService.getTargetProgram();
@@ -35,6 +35,13 @@ export default function App() {
     setTargetProgramId(loadedTarget);
     setSettings(loadedSettings);
 
+    // Gerçek Zamanlı Bulut Aboneliği (Öğrenci ve Öğretmen Eş Zamanlı Takip)
+    const unsubscribeCloud = StorageService.subscribeToLiveSync((cloudState) => {
+      if (cloudState.exams) setExams(cloudState.exams);
+      if (cloudState.targetProgram) setTargetProgramId(cloudState.targetProgram);
+      if (cloudState.settings) setSettings(cloudState.settings);
+    });
+
     // PWA Install Event Listener
     const handleBeforeInstallPrompt = (e) => {
       e.preventDefault();
@@ -43,7 +50,10 @@ export default function App() {
     };
 
     window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
-    return () => window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+    return () => {
+      unsubscribeCloud();
+      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+    };
   }, []);
 
   // PWA Yükleme Butonu Tıklaması

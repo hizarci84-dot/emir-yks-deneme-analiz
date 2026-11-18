@@ -1,10 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { Sparkles, Calendar, Cloud, Plus, GraduationCap, CheckCircle } from 'lucide-react';
+import { Sparkles, Calendar, Cloud, Plus, GraduationCap, CheckCircle, RefreshCw } from 'lucide-react';
+import { StorageService } from '../services/storage';
 
 export default function Navbar({ activeTab, setActiveTab, onOpenAddModal, settings }) {
   // YKS Geri Sayım Hesaplama (Hedef yıla göre dinamik)
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0 });
+  const [cloudStatus, setCloudStatus] = useState(StorageService.getCloudStatus());
   const targetYear = parseInt(settings?.targetYear, 10) || 2028;
+
+  useEffect(() => {
+    const unsub = StorageService.onCloudStatusChange(setCloudStatus);
+    return () => unsub();
+  }, []);
 
   useEffect(() => {
     const calculateTime = () => {
@@ -76,14 +83,18 @@ export default function Navbar({ activeTab, setActiveTab, onOpenAddModal, settin
             {/* Cloud Status Indicator */}
             <button
               onClick={() => setActiveTab('settings')}
-              title="Bulut Senkronizasyon Durumu"
+              title="Gerçek Zamanlı Bulut Senkronizasyon Durumu (Öğrenci - Öğretmen Canlı Eşitleme)"
               className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200/70 hover:bg-emerald-100 transition shadow-sm"
             >
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-              </span>
-              <span className="hidden md:inline">Bulut Aktif</span>
+              {cloudStatus?.state === 'SYNCING' ? (
+                <RefreshCw className="w-3.5 h-3.5 text-emerald-600 animate-spin" />
+              ) : (
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                </span>
+              )}
+              <span className="hidden md:inline">{cloudStatus?.message || 'Bulut Aktif'}</span>
             </button>
 
             {/* Quick Add Button (Desktop) */}
